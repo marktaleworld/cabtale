@@ -263,31 +263,56 @@ class _SignInScreenState extends State<SignInScreen> {
                       //   ),
                       // ]),
 
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   children: [
+                      //     Text(
+                      //       "Want to drive with us? ",
+                      //       style: textRegular.copyWith(
+                      //         fontSize: Dimensions.fontSizeSmall,
+                      //         color: Theme.of(context).hintColor,
+                      //       ),
+                      //     ),
+                      //     TextButton(
+                      //       onPressed: () => launchUrlString('https://cabtale.com/contact-us/'),
+                      //       style: TextButton.styleFrom(
+                      //         padding: EdgeInsets.zero,
+                      //         minimumSize: const Size(50, 30),
+                      //         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      //       ),
+                      //       child: Text(
+                      //         "Become a Partner/ ड्राइवर बनें",
+                      //         style: textRegular.copyWith(
+                      //           fontWeight: FontWeight.bold,
+                      //           decoration: TextDecoration.underline,
+                      //           color: Theme.of(context).primaryColor,
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            "Want to drive with us? ",
-                            style: textRegular.copyWith(
-                              fontSize: Dimensions.fontSizeSmall,
-                              color: Theme.of(context).hintColor,
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () => launchUrlString('https://cabtale.com/contact-us/'),
-                            style: TextButton.styleFrom(
-                              padding: EdgeInsets.zero,
-                              minimumSize: const Size(50, 30),
-                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            ),
-                            child: Text(
-                              "Become a Driver",
-                              style: textRegular.copyWith(
-                                decoration: TextDecoration.underline,
-                                color: Theme.of(context).primaryColor,
-                              ),
-                            ),
-                          ),
+                          const SizedBox(width: Dimensions.paddingSizeSmall),
+                          // show a spinner while loading, otherwise the button
+                          GetBuilder<AuthController>(builder: (authController) {
+                            return authController.isLoading
+                                ? SpinKitCircle(
+                                    color: Theme.of(context).primaryColor,
+                                    size: 24.0,
+                                  )
+                                : Flexible(
+                                    fit: FlexFit.loose,
+                                    child: ButtonWidget(
+                                      buttonText: 'Become a Driver / ड्राइवर बनें',
+                                      onPressed: () => launchUrlString(
+                                        'https://cabtale.com/contact-us/',
+                                      ),
+                                      radius: 50,
+                                    ),
+                                  );
+                          }),
                         ],
                       ),
                       SizedBox(height: MediaQuery.of(context).size.height*0.1),
