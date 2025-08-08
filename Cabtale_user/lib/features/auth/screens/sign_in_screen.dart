@@ -89,8 +89,8 @@ class _SignInScreenState extends State<SignInScreen> {
           padding: const EdgeInsets.all(Dimensions.paddingSizeLarge),
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Column(children: [
-              Image.asset(Images.logoWithName, height: 75),
-              const SizedBox(height: Dimensions.paddingSizeSmall),
+              // Image.asset(Images.logoWithName, height: 75),
+              // const SizedBox(height: Dimensions.paddingSizeSmall),
 
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 Text('${'welcome_to'.tr} ${AppConstants.appName}',
