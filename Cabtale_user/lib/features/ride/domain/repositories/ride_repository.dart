@@ -25,18 +25,19 @@ class RideRepository implements RideRepositoryInterface{
         bool extraOne = false, bool extraTwo = false,
         String? parcelWeight,
         String? parcelCategoryId,
+
       }) async {
-    return await apiClient.postData(AppConstants.estimatedFare, {
-      "pickup_coordinates" : '[${pickupLatLng.latitude},${pickupLatLng.longitude}]',
-      "destination_coordinates" : '[${destinationLatLng.latitude},${destinationLatLng.longitude}]',
-      "type" : type,
-      "pickup_address": pickupAddress,
-      "destination_address": destinationAddress,
-      "intermediate_coordinates": (extraOne && !extraTwo) ? '[[${extraOneLatLng?.latitude},${extraOneLatLng?.longitude}]]': (extraOne && extraTwo)
-          ? '[[${extraOneLatLng?.latitude},${extraOneLatLng?.longitude}],[${extraTwoLatLng?.latitude}, ${extraTwoLatLng?.longitude}]]' : '',
-      'parcel_weight' : type == 'parcel' ?  Get.find<ParcelController>().parcelWeightController.text : parcelWeight,
-      "parcel_category_id" :type == 'parcel' ? Get.find<ParcelController>().parcelCategoryList![Get.find<ParcelController>().selectedParcelCategory].id : parcelCategoryId
-    });
+        return await apiClient.postData(AppConstants.estimatedFare, {
+          "pickup_coordinates" : '[${pickupLatLng.latitude},${pickupLatLng.longitude}]',
+          "destination_coordinates" : '[${destinationLatLng.latitude},${destinationLatLng.longitude}]',
+          "type" : type,
+          "pickup_address": pickupAddress,
+          "destination_address": destinationAddress,
+          "intermediate_coordinates": (extraOne && !extraTwo) ? '[[${extraOneLatLng?.latitude},${extraOneLatLng?.longitude}]]': (extraOne && extraTwo)
+              ? '[[${extraOneLatLng?.latitude},${extraOneLatLng?.longitude}],[${extraTwoLatLng?.latitude}, ${extraTwoLatLng?.longitude}]]' : '',
+          'parcel_weight' : type == 'parcel' ?  Get.find<ParcelController>().parcelWeightController.text : parcelWeight,
+          "parcel_category_id" :type == 'parcel' ? Get.find<ParcelController>().parcelCategoryList![Get.find<ParcelController>().selectedParcelCategory].id : parcelCategoryId,
+        });
   }
 
   @override

@@ -187,6 +187,7 @@ class RideController extends GetxController implements GetxService {
       parcelWeight: Get.find<ParcelController>().parcelWeightController.text,
       parcelCategoryId: parcel ? parcelController.parcelCategoryList![parcelController.selectedParcelCategory].id : '',
     );
+    
 
     if(response!.statusCode == 200) {
       loading = false;

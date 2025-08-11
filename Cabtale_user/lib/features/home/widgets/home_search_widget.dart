@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ride_sharing_user_app/common_widgets/button_widget.dart';
 import 'package:ride_sharing_user_app/features/home/widgets/voice_search_dialog.dart';
 import 'package:ride_sharing_user_app/util/dimensions.dart';
 import 'package:ride_sharing_user_app/util/images.dart';
@@ -83,5 +84,12 @@ class HomeSearchWidget extends StatelessWidget {
         onTap: () => Get.to(() => const SetDestinationScreen()),
       ),
     );
+    // return ButtonWidget(
+    //           buttonText: 'Book your Ride',
+    //           radius: 50,
+    //           onPressed: () {
+    //             Get.to(() => const SetDestinationScreen());
+    //           },
+    //         );
   }
 }

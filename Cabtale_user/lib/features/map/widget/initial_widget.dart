@@ -113,17 +113,20 @@ class _InitialWidgetState extends State<InitialWidget> {
             rideController.discountFare.toString() :
             rideController.estimatedFare.toString(),
           ) :
-          ButtonWidget(buttonText: "find_rider".tr, onPressed: () {
-            rideController.submitRideRequest(rideController.noteController.text, false).then((value) {
-              if(value.statusCode == 200) {
-                Get.find<AuthController>().saveFindingRideCreatedTime();
-                rideController.updateRideCurrentState(RideState.findingRider);
-                Get.find<MapController>().initializeData();
-                Get.find<MapController>().setOwnCurrentLocation();
-                Get.find<MapController>().notifyMapController();
-              }
-            });
-          }),
+          ButtonWidget(
+            // buttonText: "find_rider".tr, 
+            buttonText: 'Schedule Ride', 
+            onPressed: () {
+              rideController.submitRideRequest(rideController.noteController.text, false).then((value) {
+                if(value.statusCode == 200) {
+                  Get.find<AuthController>().saveFindingRideCreatedTime();
+                  rideController.updateRideCurrentState(RideState.findingRider);
+                  Get.find<MapController>().initializeData();
+                  Get.find<MapController>().setOwnCurrentLocation();
+                  Get.find<MapController>().notifyMapController();
+                }
+              });
+            }),
         ]);
       });
     });
