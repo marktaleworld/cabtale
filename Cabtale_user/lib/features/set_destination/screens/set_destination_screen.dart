@@ -46,7 +46,7 @@ class _SetDestinationScreenState extends State<SetDestinationScreen> {
   }
 
   static const Duration _minLead = Duration(minutes: 30);
-  static const Duration _maxWindow = Duration(days: 45);
+  static const Duration _maxWindow = Duration(days: 90);
 
   bool _validateSchedule(DateTime? dt) {
     if (dt == null) {
@@ -59,7 +59,7 @@ class _SetDestinationScreenState extends State<SetDestinationScreen> {
       return false;
     }
     if (dt.isAfter(now.add(_maxWindow))) {
-      showCustomSnackBar('You can schedule a maximum of 15 days from today', isError: true);
+      showCustomSnackBar('You can schedule a maximum of 90 days from today', isError: true);
       return false;
     }
     return true;
