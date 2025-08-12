@@ -284,6 +284,7 @@ class TripRequestController extends Controller
             $save_trip->estimated_fare = $request->bid ? $request->actual_fare : $request->estimated_fare;
             $save_trip->actual_fare = $request->bid ? $request->actual_fare : $request->estimated_fare;
             $save_trip->rise_request_count = $request->bid ? 1 : 0;
+            $save_trip->scheduled_at = \Carbon\Carbon::parse($request->input('scheduled_at'))->utc();  
             if ($save_trip->discount_id != null) {
                 $save_trip->discount_id = null;
                 $save_trip->discount_amount = null;
@@ -306,7 +307,9 @@ class TripRequestController extends Controller
                 'return_fee' => $request->type == PARCEL ? $request->return_fee : 0,
                 'cancellation_fee' => $request->type == PARCEL ? $request->cancellation_fee : 0,
                 'customer_request_coordinates' => $customer_point,
-                'rise_request_count' => $request->bid ? 1 : 0
+                'rise_request_count' => $request->bid ? 1 : 0,
+                'scheduled_at' => \Carbon\Carbon::parse($request->input('scheduled_at'))->utc(),
+
             ]);
             $save_trip = $this->trip->store(attributes: $request->all());
         }
@@ -356,7 +359,7 @@ class TripRequestController extends Controller
                 'action' => 'new_ride_request_notification'
             ];
             if (!empty($notify)) {
-
+                
                 dispatch(new SendPushNotificationJob($notification, $find_drivers))->onQueue('high');
                 $this->temp_notification->store(['data' => $notify]);
             }

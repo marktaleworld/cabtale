@@ -65,6 +65,7 @@ class TripRequest extends Model
         'tips',
         'is_paused',
         'map_screenshot',
+        'scheduled_at',
         'deleted_at',
         'created_at',
         'updated_at',
@@ -91,7 +92,8 @@ class TripRequest extends Model
         "discount_amount" => 'float',
         "total_fare" => 'float',
         "is_paused" => 'boolean',
-        "rise_request_count" => 'integer'
+        "rise_request_count" => 'integer',
+        'scheduled_at' => 'datetime',
     ];
 
     protected static function newFactory()

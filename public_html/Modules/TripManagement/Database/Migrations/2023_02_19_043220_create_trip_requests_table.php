@@ -43,6 +43,7 @@ class CreateTripRequestsTable extends Migration
             $table->double('tips')->default(0);
             $table->softDeletes();
             $table->timestamps();
+            $table->timestamp('scheduled_at')->nullable()->index();
         });
     }
 
