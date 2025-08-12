@@ -418,18 +418,17 @@ class _SetDestinationScreenState extends State<SetDestinationScreen> {
                                   final now = DateTime.now();
                                     final picked = await showDateTimePicker(
                                       context: context,
-                                      firstDate: now,                          // from today
-                                      lastDate: now.add(_maxWindow),           // up to 15 days ahead
-                                      initialDate: _scheduledAt ?? now,        // keep previous or now
+                                      firstDate: now,                          
+                                      lastDate: now.add(_maxWindow),           
+                                      initialDate: _scheduledAt ?? now,        
                                     );
 
                                     if (!mounted) return;
                                     if (picked == null) return;
 
-                                    if (_validateSchedule(picked)) {
+                                    if (_validateSchedule(picked)) { 
                                       setState(() => _scheduledAt = picked);
-                                      // If you want controller to know now:
-                                      //Get.find<RideController>().setScheduledAt(picked);
+                                      Get.find<RideController>().setScheduledAt(picked);
                                     }
                                   },
                                 child: Row(
@@ -440,8 +439,8 @@ class _SetDestinationScreenState extends State<SetDestinationScreen> {
                                       Text(
                                         '${MaterialLocalizations.of(context).formatFullDate(_scheduledAt!)} '
                                         '${MaterialLocalizations.of(context).formatTimeOfDay(TimeOfDay.fromDateTime(_scheduledAt!))}',
-                                        style: TextStyle(color: Colors.white),
-                                      ) : Text(
+                                        style: const TextStyle(color: Colors.white),
+                                      ) : const Text(
                                         'Select Date and Time',
                                         style: TextStyle(color: Colors.white),
                                       ),
@@ -530,6 +529,9 @@ class _SetDestinationScreenState extends State<SetDestinationScreen> {
                                   }else if(locationController.destinationLocationController.text.isEmpty) {
                                     showCustomSnackBar('destination_location_is_required'.tr);
                                     FocusScope.of(context).requestFocus(destinationLocationFocus);
+                                  }else if(_scheduledAt == null) {
+                                    showCustomSnackBar('Please select the date and time', isError: true);
+                                    return;
                                   }else{
                                     rideController.getEstimatedFare(false).then((value) {
                                       if(value.statusCode == 200) {

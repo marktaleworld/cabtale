@@ -65,6 +65,7 @@ class _InitialWidgetState extends State<InitialWidget> {
             extraTwoAddress: locationController.extraRouteTwoAddress?.address ?? '',
             toAddress: locationController.toAddress?.address??'',
             entrance: locationController.entranceController.text,
+            scheduledAt: Get.find<RideController>().scheduledAt,
           ),
           const SizedBox(height: Dimensions.paddingSizeDefault),
 

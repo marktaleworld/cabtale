@@ -16,16 +16,33 @@ class RouteWidget extends StatefulWidget {
   final String extraTwoAddress;
   final String entrance;
   final bool fromParcelOngoing;
-  const RouteWidget({super.key, required this.totalDistance,
-    required this.fromAddress, required this.toAddress,
-    required this.extraOneAddress, required this.extraTwoAddress,
-    required this.entrance, this.fromParcelOngoing = false});
+  final DateTime? scheduledAt; 
+
+  const RouteWidget({
+    super.key, 
+    required this.totalDistance,
+    required this.fromAddress, 
+    required this.toAddress,
+    required this.extraOneAddress, 
+    required this.extraTwoAddress,
+    required this.entrance, 
+    this.fromParcelOngoing = false,
+    this.scheduledAt,
+    });
 
   @override
   State<RouteWidget> createState() => _RouteWidgetState();
 }
 
 class _RouteWidgetState extends State<RouteWidget> {
+
+  String _fmtSchedule(BuildContext context, DateTime dt) {
+    final l = MaterialLocalizations.of(context);
+    final dateStr = l.formatFullDate(dt);
+    final timeStr = l.formatTimeOfDay(TimeOfDay.fromDateTime(dt));
+    return '$dateStr, $timeStr';
+  }
+
   String totalDistance = '0', estDistance = '0', removeComma= '0';
   @override
   Widget build(BuildContext context) {
@@ -122,29 +139,114 @@ class _RouteWidgetState extends State<RouteWidget> {
           ]),
           const SizedBox(height: Dimensions.paddingSizeDefault),
 
+          // if(!widget.fromParcelOngoing)
+          //   GetBuilder<RideController>(builder: (rideController) {
+          //     return Padding(
+          //       padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
+          //       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          //         Row(children: [
+          //           SizedBox(width: Dimensions.iconSizeMedium,child: Image.asset(Images.distanceCalculated)),
+          //           const SizedBox(width: Dimensions.paddingSizeSmall),
+
+          //           Text("total_distance".tr, style: textRegular.copyWith(
+          //               color: Get.isDarkMode ?
+          //               Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.7) : null,
+          //           )),
+          //         ]),
+          //         const SizedBox(width: Dimensions.paddingSizeSmall),
+
+          //         Text(
+          //           widget.totalDistance.contains('km') ?
+          //           widget.totalDistance :
+          //           '${double.parse(widget.totalDistance).toStringAsFixed(2)} km',
+          //           style: textRegular.copyWith(color: Get.isDarkMode ? Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.7) : null),
+          //         ),
+          //       ]),
+          //     );
+          //   }),
           if(!widget.fromParcelOngoing)
             GetBuilder<RideController>(builder: (rideController) {
-              return Padding(
-                padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
-                child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  Row(children: [
-                    SizedBox(width: Dimensions.iconSizeMedium,child: Image.asset(Images.distanceCalculated)),
-                    const SizedBox(width: Dimensions.paddingSizeSmall),
-
-                    Text("total_distance".tr, style: textRegular.copyWith(
-                        color: Get.isDarkMode ?
-                        Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.7) : null,
-                    )),
-                  ]),
-                  const SizedBox(width: Dimensions.paddingSizeSmall),
-
-                  Text(
-                    widget.totalDistance.contains('km') ?
-                    widget.totalDistance :
-                    '${double.parse(widget.totalDistance).toStringAsFixed(2)} km',
-                    style: textRegular.copyWith(color: Get.isDarkMode ? Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.7) : null),
+              return Column(
+                children: [
+                  // Existing "Total distance" row
+                  Padding(
+                    padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(children: [
+                          SizedBox(
+                            width: Dimensions.iconSizeMedium,
+                            child: Image.asset(Images.distanceCalculated),
+                          ),
+                          const SizedBox(width: Dimensions.paddingSizeSmall),
+                          Text(
+                            "total_distance".tr,
+                            style: textRegular.copyWith(
+                              color: Get.isDarkMode
+                                  ? Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.7)
+                                  : null,
+                            ),
+                          ),
+                        ]),
+                        const SizedBox(width: Dimensions.paddingSizeSmall),
+                        Text(
+                          widget.totalDistance.contains('km')
+                              ? widget.totalDistance
+                              : '${double.parse(widget.totalDistance).toStringAsFixed(2)} km',
+                          style: textRegular.copyWith(
+                            color: Get.isDarkMode
+                                ? Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.7)
+                                : null,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ]),
+
+                  if (widget.scheduledAt != null)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: Dimensions.paddingSizeExtraSmall,
+                        vertical: Dimensions.paddingSizeExtraSmall,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(children: [
+                            Icon(
+                              Icons.schedule,
+                              size: 20,
+                              color: Get.isDarkMode
+                                  ? Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.7)
+                                  : Theme.of(context).primaryColor.withOpacity(0.8),
+                            ),
+                            const SizedBox(width: Dimensions.paddingSizeSmall),
+                            Text(
+                              'Scheduled at',
+                              style: textRegular.copyWith(
+                                color: Get.isDarkMode
+                                    ? Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.7)
+                                    : null,
+                              ),
+                            ),
+                          ]),
+                          Flexible(
+                            child: Text(
+                              _fmtSchedule(context, widget.scheduledAt!),
+                              textAlign: TextAlign.right,
+                              overflow: TextOverflow.ellipsis,
+                              style: textRegular.copyWith(
+                                color: Get.isDarkMode
+                                    ? Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.7)
+                                    : null,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                ],
               );
             }),
         ]);

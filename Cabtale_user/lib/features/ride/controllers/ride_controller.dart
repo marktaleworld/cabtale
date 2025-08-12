@@ -61,6 +61,8 @@ class RideController extends GetxController implements GetxService {
   bool isCouponApplicable = false;
   double discountFare = 0;
   double discountAmount = 0;
+  DateTime? _scheduledAt;
+  DateTime? get scheduledAt => _scheduledAt;
 
 
   TripDetails? get currentTripDetails => tripDetails;
@@ -75,6 +77,12 @@ class RideController extends GetxController implements GetxService {
     loading = false;
     encodedPolyLine = '';
   }
+
+  void setScheduledAt(DateTime? dt, {bool notify = true}) {
+    _scheduledAt = dt;
+    if (notify) update();
+  }
+
 
 
   void updateRideCurrentState(RideState newState) {
