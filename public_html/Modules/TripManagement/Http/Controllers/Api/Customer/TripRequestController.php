@@ -312,6 +312,9 @@ class TripRequestController extends Controller
 
             ]);
             $save_trip = $this->trip->store(attributes: $request->all());
+            $save_trip->scheduled_at = \Carbon\Carbon::parse($request->input('scheduled_at'))->utc();
+            $save_trip->save();
+            
         }
 
         if ($request->bid) {
