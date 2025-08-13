@@ -363,7 +363,8 @@ class TripRequestController extends Controller
             ];
             if (!empty($notify)) {
                 
-                dispatch(new SendPushNotificationJob($notification, $find_drivers))->onQueue('high');
+                // dispatch(new SendPushNotificationJob($notification, $find_drivers))->onQueue('high');
+                \App\Jobs\SendPushNotificationJob::dispatchSync($notification, $find_drivers);
                 $this->temp_notification->store(['data' => $notify]);
             }
             foreach ($find_drivers as $key => $value) {
