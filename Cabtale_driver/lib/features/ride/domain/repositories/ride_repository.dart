@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ride_sharing_user_app/data/api_client.dart';
@@ -75,14 +76,18 @@ class RideRepository implements RideRepositoryInterface{
   }
 
   @override
-  Future<Response> tripStatusUpdate(String status, String id,String cancellationCause,String dateTime) async {
+  Future<Response> tripStatusUpdate(String status, String id,String cancellationCause,String dateTime, {double? tollAmount}) async {
+    if (kDebugMode) {
+      print('toll amount -> $tollAmount');
+    }
     return await apiClient.postData(AppConstants.tripStatusUpdate,
         {
           "status": status,
           "cancel_reason": cancellationCause,
           "trip_request_id" : id,
           "_method" : 'put',
-          "return_time" : dateTime
+          "return_time" : dateTime,
+          if (tollAmount != null && status == 'completed') "toll_amount": tollAmount,
         });
   }
 

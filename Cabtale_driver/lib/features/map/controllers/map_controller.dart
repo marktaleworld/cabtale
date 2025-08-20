@@ -170,9 +170,9 @@ class RiderMapController extends GetxController implements GetxService {
     List<LatLng> polylineCoordinates = [];
     if(lines != ''){
       List<PointLatLng> result = polylinePoints.decodePolyline(lines);
-      if (kDebugMode) {
-        print('here is latlng ==> ${result.length},${result[0].latitude}-/${result[result.length-1].latitude},/${result[result.length-1].longitude}');
-      }
+      // if (kDebugMode) {
+      //   print('here is latlng ==> ${result.length},${result[0].latitude}-/${result[result.length-1].latitude},/${result[result.length-1].longitude}');
+      // }
       if (result.isNotEmpty) {
         for (var point in result) {
           polylineCoordinates.add(LatLng(point.latitude, point.longitude));

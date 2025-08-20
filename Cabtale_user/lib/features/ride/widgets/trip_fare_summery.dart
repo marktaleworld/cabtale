@@ -167,6 +167,13 @@ class TripFareSummery extends StatelessWidget {
                   amount: rideController.finalFare?.vatTax ?? 0,
                 ),
 
+              if(fromPayment && rideController.finalFare!.tollAmount!.toDouble() > 0)
+                PaymentItemInfoWidget(
+                  icon: Images.farePrice,
+                  title: 'Toll',
+                  amount: rideController.finalFare?.tollAmount ?? 0,
+                ),
+
               if(fromPayment && double.parse(paymentController.tipAmount) > 0)
                 PaymentItemInfoWidget(
                   icon: Images.farePrice, title: 'tips'.tr,

@@ -11,7 +11,7 @@ abstract class RideServiceInterface {
   Future<dynamic> ignoreMessage(String tripId);
   Future<dynamic> matchOtp(String tripId, String otp);
   Future<dynamic> remainDistance(String id);
-  Future<dynamic> tripStatusUpdate(String status, String id,String cancellationCause,String dateTime);
+  Future<dynamic> tripStatusUpdate(String status, String id,String cancellationCause,String dateTime, {double? tollAmount});
   Future<dynamic> getPendingRideRequestList(int offset, {int limit = 10});
   Future<dynamic> ongoingTripRequest();
   Future<dynamic> getFinalFare(String tripId);

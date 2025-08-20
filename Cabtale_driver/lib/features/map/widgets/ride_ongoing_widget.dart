@@ -41,6 +41,17 @@ class RideOngoingWidget extends StatefulWidget {
 class _RideOngoingWidgetState extends State<RideOngoingWidget> {
   bool isFinished = false;
   int currentState = 0;
+
+  bool _showTollInput = false;
+  final TextEditingController _tollAmountController = TextEditingController();
+
+  @override
+  void dispose() {
+    _tollAmountController.dispose();
+    super.dispose();
+  }
+
+  
   @override
   Widget build(BuildContext context) {
     return GetBuilder<RideController>(builder: (rideController) {
@@ -165,6 +176,270 @@ class _RideOngoingWidgetState extends State<RideOngoingWidget> {
                 ]),
               ),
             ),
+
+          //  Padding(
+          //   padding: const EdgeInsets.only(
+          //     left: Dimensions.paddingSizeLarge,
+          //     right: Dimensions.paddingSizeLarge,
+          //     bottom: Dimensions.paddingSizeDefault,
+          //   ),
+          //   child: Column(
+          //     crossAxisAlignment: CrossAxisAlignment.start,
+          //     children: [
+
+          //       // Step 1: Button to reveal input
+          //       if (!_showTollInput)
+          //         ButtonWidget(
+          //           buttonText: 'Add Toll Amount',
+          //           backgroundColor: Theme.of(context).primaryColor,
+          //           textColor: Theme.of(context).cardColor,
+          //           onPressed: () {
+          //             setState(() {
+          //               _showTollInput = true;
+          //             });
+          //           },
+          //         ),
+
+          //       if (_showTollInput) ...[
+          //         Row(
+          //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //           children: [
+          //             Text(
+          //               'Add Total Toll Amount',
+          //               style: textSemiBold.copyWith(
+          //                 color: Theme.of(context).primaryColor,
+          //               ),
+          //             ),
+          //             TextButton(
+          //               onPressed: () {
+          //                 setState(() {
+          //                   _showTollInput = false;
+          //                   _tollAmountController.clear();
+          //                 });
+          //               },
+          //               child: const Text(
+          //                 'Hide',
+          //                 style: TextStyle(color: Colors.red),
+          //               ),
+          //             ),
+          //           ],
+          //         ),
+
+          //         const SizedBox(height: Dimensions.paddingSizeSmall),
+
+          //         TextField(
+          //           controller: _tollAmountController,
+          //           keyboardType: const TextInputType.numberWithOptions(decimal: true),
+          //           decoration: InputDecoration(
+          //             hintText: 'Eg. ₹ 120',
+          //             contentPadding: const EdgeInsets.symmetric(
+          //               horizontal: Dimensions.paddingSizeDefault,
+          //               vertical: Dimensions.paddingSizeSmall,
+          //             ),
+          //             border: OutlineInputBorder(
+          //               borderRadius: BorderRadius.circular(Dimensions.paddingSizeSmall),
+          //             ),
+          //             enabledBorder: OutlineInputBorder(
+          //               borderRadius: BorderRadius.circular(Dimensions.paddingSizeSmall),
+          //               borderSide: BorderSide(
+          //                 color: Theme.of(context).hintColor.withOpacity(0.25),
+          //                 width: 0.75,
+          //               ),
+          //             ),
+          //           ),
+          //         ),
+
+          //         const SizedBox(height: Dimensions.paddingSizeSmall),
+
+          //         ButtonWidget(
+          //           buttonText: 'Submit Toll',
+          //           backgroundColor: Theme.of(context).primaryColor,
+          //           textColor: Theme.of(context).cardColor,
+          //           onPressed: () {
+          //             showDialog(
+          //               context: context,
+          //               builder: (context) => AlertDialog(
+          //                 backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          //                 title: const Text('Confirmation'),
+          //                 content: const Text('Are you sure you want to submit the toll amount?'),
+          //                 actions: [
+          //                   TextButton(
+          //                     onPressed: () => Navigator.of(context).pop(),
+          //                     child: const Text('No'),
+          //                   ),
+          //                   // ✅ FIXED: run the save logic here (no nested TextButton)
+          //                   TextButton(
+          //                     onPressed: () {
+          //                       Navigator.of(context).pop();
+
+          //                       final raw = _tollAmountController.text.trim();
+          //                       final amount = double.tryParse(raw);
+          //                       if (raw.isEmpty || amount == null || amount < 0) {
+          //                         showCustomSnackBar('Please enter a valid toll amount', isError: true);
+          //                         return;
+          //                       }
+
+          //                       Get.find<RideController>().setTollAmount(amount); // <-- actually saves
+          //                       showCustomSnackBar('Toll amount saved', isError: false);
+
+          //                       setState(() => _showTollInput = false);
+          //                       _tollAmountController.clear();
+          //                       FocusManager.instance.primaryFocus?.unfocus();
+          //                     },
+          //                     child: const Text('Yes'),
+          //                   ),
+          //                 ],
+          //               ),
+          //             );
+          //           },
+          //         ),
+
+          //       ],
+          //     ],
+          //   ),
+          // ),
+
+          Padding(
+            padding: const EdgeInsets.only(
+              left: Dimensions.paddingSizeLarge,
+              right: Dimensions.paddingSizeLarge,
+              bottom: Dimensions.paddingSizeDefault,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+
+                // Step 1: Button to reveal input
+                if (!_showTollInput)
+                  ButtonWidget(
+                    buttonText: Get.find<RideController>().tollAmount != null
+                        ? 'Edit Toll Amount'
+                        : 'Add Toll Amount',
+                    backgroundColor: Theme.of(context).primaryColor,
+                    textColor: Theme.of(context).cardColor,
+                    onPressed: () {
+                      setState(() {
+                        _showTollInput = true;
+                        final savedAmount = Get.find<RideController>().tollAmount;
+                        if (savedAmount != null) {
+                          _tollAmountController.text = savedAmount.toString();
+                        }
+                      });
+                    },
+                  ),
+
+                if (_showTollInput) ...[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        Get.find<RideController>().tollAmount != null
+                            ? 'Edit Toll Amount'
+                            : 'Add Total Toll Amount',
+                        style: textSemiBold.copyWith(
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          setState(() {
+                            _showTollInput = false;
+                            _tollAmountController.clear();
+                          });
+                        },
+                        child: const Text(
+                          'Hide',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: Dimensions.paddingSizeSmall),
+
+                  TextField(
+                    controller: _tollAmountController,
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    decoration: InputDecoration(
+                      hintText: 'Eg. ₹ 120',
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: Dimensions.paddingSizeDefault,
+                        vertical: Dimensions.paddingSizeSmall,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(Dimensions.paddingSizeSmall),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(Dimensions.paddingSizeSmall),
+                        borderSide: BorderSide(
+                          color: Theme.of(context).hintColor.withOpacity(0.25),
+                          width: 0.75,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: Dimensions.paddingSizeSmall),
+
+                  ButtonWidget(
+                    buttonText: Get.find<RideController>().tollAmount != null
+                        ? 'Update Toll'
+                        : 'Submit Toll',
+                    backgroundColor: Theme.of(context).primaryColor,
+                    textColor: Theme.of(context).cardColor,
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                          title: const Text('Confirmation'),
+                          content: Text(
+                            Get.find<RideController>().tollAmount != null
+                                ? 'Do you want to update the toll amount?'
+                                : 'Are you sure you want to submit the toll amount?',
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              child: const Text('No'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+
+                                final raw = _tollAmountController.text.trim();
+                                final amount = double.tryParse(raw);
+                                if (raw.isEmpty || amount == null || amount < 0) {
+                                  showCustomSnackBar('Please enter a valid toll amount', isError: true);
+                                  return;
+                                }
+
+                                Get.find<RideController>().setTollAmount(amount);
+
+                                showCustomSnackBar(
+                                  Get.find<RideController>().tollAmount != null
+                                      ? 'Toll amount updated'
+                                      : 'Toll amount saved',
+                                  isError: false,
+                                );
+
+                                setState(() => _showTollInput = false);
+                                _tollAmountController.clear();
+                                FocusManager.instance.primaryFocus?.unfocus();
+                              },
+                              child: const Text('Yes'),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ],
+            ),
+          ),
+
+
 
             Padding(
               padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeDefault),

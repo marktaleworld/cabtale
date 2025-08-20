@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:ride_sharing_user_app/data/api_client.dart';
@@ -81,8 +80,10 @@ class RideRepository implements RideRepositoryInterface{
         String? tripRequestId,
         double? returnFee,
         double? cancellationFee,
+        //DateTime? scheduledAt,
       }) async {
-    return await apiClient.postData(AppConstants.rideRequest, {
+    var body = {
+      //'scheduled_at': scheduledAt!.toLocal().toIso8601String(), 
       "pickup_coordinates" : '[$pickupLat,$pickupLng]',
       "destination_coordinates" : '[$destinationLat,$destinationLng]',
       "customer_coordinates": '[$customerCurrentLat,$customerCurrentLng]',
@@ -115,7 +116,9 @@ class RideRepository implements RideRepositoryInterface{
       "trip_request_id" : tripRequestId,
       "return_fee": returnFee,
       "cancellation_fee": cancellationFee,
-    });
+      
+    };
+    return await apiClient.postData(AppConstants.rideRequest, body);
   }
 
   @override

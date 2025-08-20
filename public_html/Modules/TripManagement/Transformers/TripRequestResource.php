@@ -77,6 +77,7 @@ class TripRequestResource extends JsonResource
             'coupon' => $this->coupon_id === null ? null : CouponResource::make($this->coupon),
             'tripStatus' => TripStatusResource::make($this->whenLoaded('tripStatus')),
             'screenshot' => $this->map_screenshot,
+            'toll_amount' => $this->fee->toll_amount ?? 0,
         ];
 
         $coordinate = [];

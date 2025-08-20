@@ -11,6 +11,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Modules\TripManagement\Entities\TripRequest;
 use Modules\TripManagement\Interfaces\TripRequestInterfaces;
+use Illuminate\Support\Arr;
 
 class TripRequestRepository implements TripRequestInterfaces
 {

@@ -266,6 +266,13 @@ class _PaymentReceivedScreenState extends State<PaymentReceivedScreen> with Widg
                       subTitle: 'later_admin_will_pay_you_this_amount',
                     ),
 
+                  if ((finalFareController.finalFare?.tollAmount ?? 0) > 0)
+                    PaymentItemInfoWidget(
+                      icon: Images.farePrice,             
+                      title: 'Toll',    
+                      amount: finalFareController.finalFare?.tollAmount ?? 0,
+                    ),
+
                   if(finalFareController.finalFare!.discountAmount!.toDouble() > 0)
                     PaymentItemInfoWidget(icon: Images.discountIcon,
                       title: 'discount_applied'.tr,

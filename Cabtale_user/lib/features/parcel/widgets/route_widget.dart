@@ -16,7 +16,7 @@ class RouteWidget extends StatefulWidget {
   final String extraTwoAddress;
   final String entrance;
   final bool fromParcelOngoing;
-  final DateTime? scheduledAt; 
+  //final DateTime? scheduledAt; 
 
   const RouteWidget({
     super.key, 
@@ -27,7 +27,7 @@ class RouteWidget extends StatefulWidget {
     required this.extraTwoAddress,
     required this.entrance, 
     this.fromParcelOngoing = false,
-    this.scheduledAt,
+    //this.scheduledAt,
     });
 
   @override
@@ -204,48 +204,48 @@ class _RouteWidgetState extends State<RouteWidget> {
                     ),
                   ),
 
-                  if (widget.scheduledAt != null)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: Dimensions.paddingSizeExtraSmall,
-                        vertical: Dimensions.paddingSizeExtraSmall,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(children: [
-                            Icon(
-                              Icons.schedule,
-                              size: 20,
-                              color: Get.isDarkMode
-                                  ? Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.7)
-                                  : Theme.of(context).primaryColor.withOpacity(0.8),
-                            ),
-                            const SizedBox(width: Dimensions.paddingSizeSmall),
-                            Text(
-                              'Scheduled at',
-                              style: textRegular.copyWith(
-                                color: Get.isDarkMode
-                                    ? Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.7)
-                                    : null,
-                              ),
-                            ),
-                          ]),
-                          Flexible(
-                            child: Text(
-                              _fmtSchedule(context, widget.scheduledAt!),
-                              textAlign: TextAlign.right,
-                              overflow: TextOverflow.ellipsis,
-                              style: textRegular.copyWith(
-                                color: Get.isDarkMode
-                                    ? Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.7)
-                                    : null,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                  // if (widget.scheduledAt != null)
+                  //   Padding(
+                  //     padding: const EdgeInsets.symmetric(
+                  //       horizontal: Dimensions.paddingSizeExtraSmall,
+                  //       vertical: Dimensions.paddingSizeExtraSmall,
+                  //     ),
+                  //     child: Row(
+                  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //       children: [
+                  //         Row(children: [
+                  //           Icon(
+                  //             Icons.schedule,
+                  //             size: 20,
+                  //             color: Get.isDarkMode
+                  //                 ? Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.7)
+                  //                 : Theme.of(context).primaryColor.withOpacity(0.8),
+                  //           ),
+                  //           const SizedBox(width: Dimensions.paddingSizeSmall),
+                  //           Text(
+                  //             'Scheduled at',
+                  //             style: textRegular.copyWith(
+                  //               color: Get.isDarkMode
+                  //                   ? Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.7)
+                  //                   : null,
+                  //             ),
+                  //           ),
+                  //         ]),
+                  //         Flexible(
+                  //           child: Text(
+                  //             _fmtSchedule(context, widget.scheduledAt!),
+                  //             textAlign: TextAlign.right,
+                  //             overflow: TextOverflow.ellipsis,
+                  //             style: textRegular.copyWith(
+                  //               color: Get.isDarkMode
+                  //                   ? Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.7)
+                  //                   : null,
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
                 ],
               );
             }),

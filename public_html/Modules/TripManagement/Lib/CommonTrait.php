@@ -13,38 +13,59 @@ trait CommonTrait
     public function calculateFinalFare($trip, $fare): array
     {
         $admin_trip_commission = (double)get_cache('trip_commission') ?? 0;
-        // parcel start
-        if ($trip->type == 'parcel') {
 
-            $vat_percent = (double)get_cache('vat_percent') ?? 1;
-            $actual_fare =  $trip->actual_fare / (1 + ($vat_percent / 100));
+        // =======================
+        // PARCEL
+        // =======================
+        if ($trip->type == 'parcel') {
+            $vat_percent   = (double)get_cache('vat_percent') ?? 1;
+            $actual_fare   = $trip->actual_fare / (1 + ($vat_percent / 100));
             $parcel_payment = $actual_fare;
-            $vat = round(($vat_percent * $parcel_payment) / 100, 2);
-            $fee = TripRequestFee::where('trip_request_id', $trip->id)->first();
-            $fee->vat_tax = $vat;
+            $vat           = round(($vat_percent * $parcel_payment) / 100, 2);
+
+            // Ensure fee row exists
+            $fee = \Modules\TripManagement\Entities\TripRequestFee::firstOrCreate(
+                ['trip_request_id' => $trip->id],
+                ['toll_amount' => 0]
+            );
+
+            // Read toll
+            $toll_amount = (float)($fee->toll_amount ?? 0);
+
+            // Persist admin/vat (leave commission as per your current rule: excluding toll)
+            $fee->vat_tax          = $vat;
             $fee->admin_commission = (($parcel_payment * $admin_trip_commission) / 100) + $vat;
             $fee->save();
 
+            // FINAL: include toll in final_fare (name unchanged)
+            $final_fare = $parcel_payment + $vat + $toll_amount;
+
             return [
-                'actual_fare' => round($actual_fare, 2),
-                'final_fare' => round($parcel_payment + $vat, 2),
-                'waiting_fee' => 0,
-                'idle_fare' => 0,
+                'actual_fare'      => round($actual_fare, 2),
+                'final_fare'       => round($final_fare, 2), // ✅ toll included
+                'waiting_fee'      => 0,
+                'idle_fare'        => 0,
                 'cancellation_fee' => 0,
-                'delay_fee' => 0,
-                'vat' => $vat,
-                'actual_distance' => $trip->estimated_distance,
+                'delay_fee'        => 0,
+                'vat'              => $vat,
+                'actual_distance'  => $trip->estimated_distance,
             ];
         }
 
-        $fee = TripRequestFee::query()->firstWhere('trip_request_id', $trip->id);
-        $time = TripRequestTime::query()->firstWhere('trip_request_id', $trip->id);
+        // =======================
+        // RIDE REQUEST
+        // =======================
+        $fee  = \Modules\TripManagement\Entities\TripRequestFee::firstOrCreate(
+            ['trip_request_id' => $trip->id],
+            ['toll_amount' => 0]
+        );
+        $time = \Modules\TripManagement\Entities\TripRequestTime::query()->firstWhere('trip_request_id', $trip->id);
 
-        $bid_on_fare = FareBidding::where('trip_request_id', $trip->id)->where('is_ignored', 0)->first();
-        $current_status = $trip->current_status;
+        $bid_on_fare     = \Modules\TripManagement\Entities\FareBidding::where('trip_request_id', $trip->id)->where('is_ignored', 0)->first();
+        $current_status  = $trip->current_status;
         $cancellation_fee = 0;
-        $waiting_fee = 0;
-        $distance_in_km = 0;
+        $waiting_fee      = 0;
+        $distance_in_km   = 0;
 
         $drivingMode = $trip?->vehicleCategory?->type === 'motor_bike' ? 'TWO_WHEELER' : 'DRIVE';
         $drop_coordinate = [
@@ -93,75 +114,79 @@ trait CommonTrait
                 $trip->coordinate->destination_coordinates->longitude,
             );
 
-            // when drop location is 100 meters more than than destination
-//            if ($haversine > (double)get_cache('driver_completion_radius') ?? 0) {
-                //when bidding is on finding the distance between requested destination and actual drop coordinates
+            $route = getRoutes(
+                $pickup_coordinate,
+                $drop_coordinate,
+                $intermediate_coordinate,
+                [$drivingMode],
+            );
+            $distance_in_km = $route[0]['distance'];
 
-                $route = getRoutes(
-                    $pickup_coordinate,
-                    $drop_coordinate,
-                    $intermediate_coordinate,
-                    [$drivingMode],
-                );
-                $distance_in_km = $route[0]['distance'];
-
-//            } // when drop location is 100 meters less than than destination
-//            else {
-//                $distance_in_km = (double)$trip->estimated_distance;
-//            }
             $distance_wise_fare_completed = $fare->base_fare_per_km * $distance_in_km;
-            $vat_percent = (double)get_cache('vat_percent') ?? 1;
-            $distanceFare = $trip->rise_request_count>0? $trip->actual_fare / (1 + ($vat_percent / 100)) : $fare->base_fare + $distance_wise_fare_completed;
-            $actual_fare = $bid_on_fare ? $bid_on_fare->bid_fare/ (1 + ($vat_percent / 100)) : $distanceFare;
+            $vat_percent  = (double)get_cache('vat_percent') ?? 1;
+            $distanceFare = $trip->rise_request_count > 0
+                ? $trip->actual_fare / (1 + ($vat_percent / 100))
+                : $fare->base_fare + $distance_wise_fare_completed;
+
+            $actual_fare = $bid_on_fare
+                ? $bid_on_fare->bid_fare / (1 + ($vat_percent / 100))
+                : $distanceFare;
         } else {
             $actual_fare = 0;
         }
 
+        $trip_started = \Carbon\Carbon::parse($trip->tripStatus->ongoing);
+        $trip_ended   = \Carbon\Carbon::parse($trip->tripStatus->$current_status);
+        $actual_time  = $trip_started->diffInMinutes($trip_ended);
 
-        $trip_started = Carbon::parse($trip->tripStatus->ongoing);
-        $trip_ended = Carbon::parse($trip->tripStatus->$current_status);
-        $actual_time = $trip_started->diffInMinutes($trip_ended);
-
-        //        Idle time & fee calculation
+        // Idle time & fee
         $idle_fee_buffer = (double)get_cache('idle_fee') ?? 0;
         $idle_diff = $trip->time->idle_time - $idle_fee_buffer;
         $idle_time = max($idle_diff, 0);
-        $idle_fee = $idle_time * $fare->idle_fee_per_min;
+        $idle_fee  = $idle_time * $fare->idle_fee_per_min;
 
-        //        Delay time & fee calculation
+        // Delay time & fee
         $delay_fee_buffer = (double)get_cache('delay_fee') ?? 0;
         $delay_diff = $actual_time - ($trip->time->estimated_time + $delay_fee_buffer + $trip->time->idle_time);
         $delay_time = max($delay_diff, 0);
-        $delay_fee = $delay_time * $fare->trip_delay_fee_per_min;
-
+        $delay_fee  = $delay_time * $fare->trip_delay_fee_per_min;
 
         $vat_percent = (double)get_cache('vat_percent') ?? 1;
         $final_fare_without_tax = ($actual_fare + $waiting_fee + $idle_fee + $cancellation_fee + $delay_fee);
         $vat = ($final_fare_without_tax * $vat_percent) / 100;
 
-        $fee->vat_tax = round($vat, 2);
+        // ✅ Toll (from fee row)
+        $toll_amount = (float)($fee->toll_amount ?? 0);
+
+        // Persist fee/time as before (commission excludes toll per your current rule)
+        $fee->vat_tax          = round($vat, 2);
         $fee->admin_commission = (($final_fare_without_tax * $admin_trip_commission) / 100) + $vat;
         $fee->cancellation_fee = round($cancellation_fee, 2);
-        $time->actual_time = $actual_time;
-        $time->idle_time = $idle_time;
-        $fee->idle_fee = round($idle_fee, 2);
-        $time->delay_time = $delay_time;
-        $fee->delay_fee = round($delay_fee, 2);
+        $fee->idle_fee         = round($idle_fee, 2);
+        $fee->delay_fee        = round($delay_fee, 2);
         $fee->save();
+
+        $time->actual_time = $actual_time;
+        $time->idle_time   = $idle_time;
+        $time->delay_time  = $delay_time;
         $time->save();
 
+        // ✅ Include toll in final_fare (name unchanged)
+        $final_fare = $final_fare_without_tax + $vat + $toll_amount;
+
         return [
-            'actual_fare' => round($actual_fare, 2),
-            'final_fare' => round($final_fare_without_tax + $vat, 2),
-            'waiting_fee' => $waiting_fee,
-            'idle_fare' => $idle_fee,
+            'actual_fare'      => round($actual_fare, 2),
+            'final_fare'       => round($final_fare, 2), // ✅ toll included
+            'waiting_fee'      => $waiting_fee,
+            'idle_fare'        => $idle_fee,
             'cancellation_fee' => $cancellation_fee,
-            'delay_fee' => $delay_fee,
-            'vat' => $vat,
-            'actual_distance' => $distance_in_km
+            'delay_fee'        => $delay_fee,
+            'vat'              => $vat,
+            'actual_distance'  => $distance_in_km,
         ];
     }
 
+    
 
     public function estimatedFare($tripRequest, $routes, $zone_id, $tripFare = null, $area_id = null,$beforeCreate = false): mixed
     {

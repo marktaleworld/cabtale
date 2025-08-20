@@ -48,6 +48,7 @@ use Modules\UserManagement\Lib\LevelUpdateCheckerTrait;
 use Modules\UserManagement\Transformers\LastLocationResource;
 use Modules\ZoneManagement\Interfaces\ZoneInterface;
 use Modules\TransactionManagement\Traits\TransactionTrait;
+use App\Jobs\ProcessScheduledTripJob;
 
 class TripRequestController extends Controller
 {
@@ -225,7 +226,209 @@ class TripRequestController extends Controller
      * @return JsonResponse
      */
     public function createRideRequest(Request $request): JsonResponse
-    {
+    // {
+    //     // \Log::info($request->getContent());
+    //     $trip = $this->getResumeRide();
+    //     if ($request->type == "ride_request" && $trip && $request->trip_request_id == null) {
+    //         return response()->json(responseFormatter(INCOMPLETE_RIDE_403), 403);
+    //     }
+    //     $validator = Validator::make($request->all(), [
+    //         'pickup_coordinates' => 'required_if:trip_request_id,==,null',
+    //         'destination_coordinates' => 'required_if:trip_request_id,==,null',
+    //         'customer_coordinates' => 'required_if:trip_request_id,==,null',
+    //         'estimated_time' => 'required_if:trip_request_id,==,null',
+    //         'estimated_distance' => 'required_if:trip_request_id,==,null',
+    //         'estimated_fare' => 'required_if:trip_request_id,==,null',
+    //         'actual_fare' => 'sometimes',
+    //         //'scheduled_at' => 'nullable|date|after:now',
+    //         'return_fee' => [
+    //             Rule::requiredIf(function () use ($request) {
+    //                 return ($request->type == 'parcel' && $request->trip_request_id == null);
+    //             })
+    //         ],
+    //         'cancellation_fee' => [
+    //             Rule::requiredIf(function () use ($request) {
+    //                 return ($request->type == 'parcel' && $request->trip_request_id == null);
+    //             })
+    //         ],
+    //         'vehicle_category_id' => [
+    //             Rule::requiredIf(function () use ($request) {
+    //                 return ($request->type == 'ride_request' && $request->trip_request_id == null);
+    //             })
+    //         ],
+    //         'note' => 'sometimes',
+    //         'pickup_address' => 'required_if:trip_request_id,==,null',
+    //         'destination_address' => 'required_if:trip_request_id,==,null',
+    //         'customer_request_coordinates' => 'required_if:trip_request_id,==,null',
+    //         'type' => 'required|in:parcel,ride_request',
+    //         'sender_name' => 'required_if:type,==,parcel',
+    //         'sender_phone' => 'required_if:type,==,parcel',
+    //         'sender_address' => 'required_if:type,==,parcel',
+    //         'receiver_name' => 'required_if:type,==,parcel',
+    //         'receiver_phone' => 'required_if:type,==,parcel',
+    //         'receiver_address' => 'required_if:type,==,parcel',
+    //         'parcel_category_id' => 'required_if:type,==,parcel',
+    //         'weight' => 'required_if:type,==,parcel',
+    //         'payer' => 'required_if:type,==,parcel'
+    //     ]);
+
+    //     if ($validator->fails()) {
+
+    //         return response()->json(responseFormatter(constant: DEFAULT_400, errors: errorProcessor($validator)), 403);
+    //     }
+
+    //     if (empty($request->header('zoneId'))) {
+
+    //         return response()->json(responseFormatter(ZONE_404), 403);
+    //     }
+
+    //     if ($request->trip_request_id) {
+    //         $save_trip = $this->trip->getBy(column: 'id', value: $request['trip_request_id']);
+    //         $save_trip->estimated_fare = $request->bid ? $request->actual_fare : $request->estimated_fare;
+    //         $save_trip->actual_fare = $request->bid ? $request->actual_fare : $request->estimated_fare;
+    //         $save_trip->rise_request_count = $request->bid ? 1 : 0;
+    //         //$save_trip->scheduled_at = \Carbon\Carbon::parse($request->input('scheduled_at'), 'Asia/Kolkata')->setTimezone('Asia/Kolkata');  
+    //         if ($save_trip->discount_id != null) {
+    //             $save_trip->discount_id = null;
+    //             $save_trip->discount_amount = null;
+    //         }
+    //         $save_trip->save();
+    //     } else {
+    //         $pickup_coordinates = json_decode($request['pickup_coordinates'], true);
+    //         $destination_coordinates = json_decode($request['destination_coordinates'], true);
+    //         $customer_coordinates = json_decode($request['customer_coordinates'], true);
+    //         $pickup_point = new Point($pickup_coordinates[0], $pickup_coordinates[1]);
+    //         $destination_point = new Point($destination_coordinates[0], $destination_coordinates[1]);
+    //         $customer_point = new Point($customer_coordinates[0], $customer_coordinates[1]);
+    //         $request->merge([
+    //             'customer_id' => auth('api')->id(),
+    //             'zone_id' => $request->header('zoneId'),
+    //             'pickup_coordinates' => $pickup_point,
+    //             'destination_coordinates' => $destination_point,
+    //             'estimated_fare' => $request->bid ? $request->actual_fare : $request->estimated_fare,
+    //             'actual_fare' => $request->bid ? $request->actual_fare : $request->estimated_fare,
+    //             'return_fee' => $request->type == PARCEL ? $request->return_fee : 0,
+    //             'cancellation_fee' => $request->type == PARCEL ? $request->cancellation_fee : 0,
+    //             'customer_request_coordinates' => $customer_point,
+    //             'rise_request_count' => $request->bid ? 1 : 0,
+    //             //'scheduled_at' => \Carbon\Carbon::parse($request->input('scheduled_at'), 'Asia/Kolkata')->setTimezone('Asia/Kolkata'),
+
+    //         ]);
+    //         //$save_trip = $this->trip->store(attributes: $request->all());
+    //         //$save_trip->scheduled_at = \Carbon\Carbon::parse($request->input('scheduled_at'), 'Asia/Kolkata')->setTimezone('Asia/Kolkata');
+    //         $save_trip->save();
+            
+    //     }
+
+    //     if ($request->bid) {
+    //         $final = $this->trip->getBy(column: 'id', value: $save_trip->id, attributes: ['relations' => 'driver.lastLocations', 'time', 'coordinate', 'fee']);
+    //     } else {
+    //         $tripDiscount = $this->trip->getBy(column: 'id', value: $save_trip->id);
+    //         $vat_percent = (double)get_cache('vat_percent') ?? 1;
+    //         $estimatedAmount = $tripDiscount->actual_fare / (1 + ($vat_percent / 100));
+    //         $discount = $this->getEstimatedDiscount(user: $tripDiscount->customer, zoneId: $tripDiscount->zone_id, tripType: $tripDiscount->type, vehicleCategoryId: $tripDiscount->vehicle_category_id, estimatedAmount: $estimatedAmount);
+    //         if ($discount['discount_amount'] != 0) {
+    //             $save_trip->discount_amount = $discount['discount_amount'];
+    //             $save_trip->discount_id = $discount['discount_id'];
+    //             $save_trip->save();
+    //         }
+    //         $final = $this->trip->getBy(column: 'id', value: $tripDiscount->id, attributes: ['relations' => 'driver.lastLocations', 'time', 'coordinate', 'fee']);
+    //     }
+
+    //     //----------------------------------------------------------
+    //     // $isScheduled = !empty($final->scheduled_at) && Carbon::parse($final->scheduled_at)->gt(Carbon::now());
+
+    //     // if ($isScheduled) {
+    //     //     ProcessScheduledTripJob::dispatch($final->id)
+    //     //         ->onQueue('high')
+    //     //         ->delay(Carbon::parse($final->scheduled_at));
+
+    //     //     $customer = auth('api')->user();
+    //     //     if ($customer?->fcm_token) {
+    //     //         $scheduledLocal = Carbon::parse($final->scheduled_at)
+    //     //             ->timezone($customer->timezone ?? config('app.timezone'))
+    //     //             ->format('M d, Y h:i A');
+
+    //     //         $confirm = [
+    //     //             'title' => translate('Ride Scheduled'),
+    //     //             'description' => translate('Your ride is scheduled for ') . $scheduledLocal,
+    //     //             'ride_request_id' => $final->id,
+    //     //             'type' => $final->type,
+    //     //             'action' => 'scheduled_ride_confirmation',
+    //     //         ];
+    //     //         \App\Jobs\SendPushNotificationJob::dispatch($confirm, [$customer])->onQueue('high');
+    //     //     }
+
+    //     //     $trip = new \Modules\TripManagement\Transformers\TripRequestResource($final);
+
+    //     //     return response()->json([
+    //     //         'success' => true,
+    //     //         'message' => 'Your ride is scheduled. We will look for a driver at the scheduled time.',
+    //     //         'data'    => $trip,
+    //     //     ], 200);
+    //     // }
+    //     //----------------------------------------------------------
+
+    //     $search_radius = (double)get_cache('search_radius') ?? 5;
+    //     // Find drivers list based on pickup locations
+    //     $find_drivers = $this->findNearestDriver(
+    //         latitude: $pickup_coordinates[0] ?? $final->coordinate->pickup_coordinates->latitude,
+    //         longitude: $pickup_coordinates[1] ?? $final->coordinate->pickup_coordinates->longitude,
+    //         zone_id: $request->header('zoneId'),
+    //         radius: $search_radius,
+    //         vehicleCategoryId: $request->vehicle_category_id ?? $final->vehicle_category_id,
+    //         requestType: $request->type ?? $final->type,
+    //         parcelWeight: $request->weight ?? null
+    //     );
+    //     //Send notifications to drivers
+    //     if (!empty($find_drivers)) {
+    //         $notify = [];
+    //         foreach ($find_drivers as $key => $value) {
+    //             if ($value->user?->fcm_token) {
+    //                 $notify[$key]['user_id'] = $value->user->id;
+    //                 $notify[$key]['trip_request_id'] = $final->id;
+    //             }
+
+    //         }
+    //         $push = getNotification('new_' . $final->type);
+    //         $notification = [
+    //             'title' => translate($push['title']),
+    //             'description' => translate($push['description']),
+    //             'ride_request_id' => $final->id,
+    //             'type' => $final->type,
+    //             'action' => 'new_ride_request_notification'
+    //         ];
+    //         if (!empty($notify)) {
+                
+    //             // dispatch(new SendPushNotificationJob($notification, $find_drivers))->onQueue('high');
+    //             \App\Jobs\SendPushNotificationJob::dispatchSync($notification, $find_drivers);
+    //             $this->temp_notification->store(['data' => $notify]);
+    //         }
+    //         foreach ($find_drivers as $key => $value) {
+    //             try {
+    //                 checkPusherConnection(CustomerTripRequestEvent::broadcast($value->user, $final));
+    //             } catch (Exception $exception) {
+
+    //             }
+    //         }
+    //     }
+    //     //Send notifications to admins
+    //     if (!is_null(businessConfig('server_key', NOTIFICATION_SETTINGS))) {
+    //         sendTopicNotification(
+    //             'admin_notification',
+    //             translate('new_request_notification'),
+    //             translate('new_request_has_been_placed'),
+    //             'null',
+    //             $final->id,
+    //             $request->type);
+    //     }
+    //     //Trip API resource
+    //     $trip = new TripRequestResource($final);
+
+    //     return response()->json(responseFormatter(TRIP_REQUEST_STORE_200, $trip));
+    // }
+
+     {
         $trip = $this->getResumeRide();
         if ($request->type == "ride_request" && $trip && $request->trip_request_id == null) {
             return response()->json(responseFormatter(INCOMPLETE_RIDE_403), 403);
@@ -284,7 +487,6 @@ class TripRequestController extends Controller
             $save_trip->estimated_fare = $request->bid ? $request->actual_fare : $request->estimated_fare;
             $save_trip->actual_fare = $request->bid ? $request->actual_fare : $request->estimated_fare;
             $save_trip->rise_request_count = $request->bid ? 1 : 0;
-            $save_trip->scheduled_at = \Carbon\Carbon::parse($request->input('scheduled_at'))->utc();  
             if ($save_trip->discount_id != null) {
                 $save_trip->discount_id = null;
                 $save_trip->discount_amount = null;
@@ -307,14 +509,9 @@ class TripRequestController extends Controller
                 'return_fee' => $request->type == PARCEL ? $request->return_fee : 0,
                 'cancellation_fee' => $request->type == PARCEL ? $request->cancellation_fee : 0,
                 'customer_request_coordinates' => $customer_point,
-                'rise_request_count' => $request->bid ? 1 : 0,
-                'scheduled_at' => \Carbon\Carbon::parse($request->input('scheduled_at'))->utc(),
-
+                'rise_request_count' => $request->bid ? 1 : 0
             ]);
             $save_trip = $this->trip->store(attributes: $request->all());
-            $save_trip->scheduled_at = \Carbon\Carbon::parse($request->input('scheduled_at'))->utc();
-            $save_trip->save();
-            
         }
 
         if ($request->bid) {
@@ -362,9 +559,8 @@ class TripRequestController extends Controller
                 'action' => 'new_ride_request_notification'
             ];
             if (!empty($notify)) {
-                
-                // dispatch(new SendPushNotificationJob($notification, $find_drivers))->onQueue('high');
-                \App\Jobs\SendPushNotificationJob::dispatchSync($notification, $find_drivers);
+
+                dispatch(new SendPushNotificationJob($notification, $find_drivers))->onQueue('high');
                 $this->temp_notification->store(['data' => $notify]);
             }
             foreach ($find_drivers as $key => $value) {
@@ -952,6 +1148,8 @@ class TripRequestController extends Controller
             $this->finalFareCouponAutoApply($trip->customer, $request['trip_request_id']);
         }
         DB::commit();
+
+        
         $trip = $this->trip->getBy(column: 'id', value: $request['trip_request_id']
             , attributes: ['relations' =>
                 ['vehicleCategory.tripFares', 'coupon', 'time', 'coordinate', 'fee', 'tripStatus']

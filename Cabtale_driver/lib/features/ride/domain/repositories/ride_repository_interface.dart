@@ -14,7 +14,7 @@ abstract class RideRepositoryInterface implements RepositoryInterface{
   Future<Response> ignoreMessage(String tripId);
   Future<Response> matchOtp(String tripId, String otp);
   Future<Response> remainDistance(String id);
-  Future<dynamic> tripStatusUpdate(String id, String status,String cancellationCause,String dateTime);
+  Future<dynamic> tripStatusUpdate(String id, String status,String cancellationCause,String dateTime, {double? tollAmount});
   Future<Response> getPendingRideRequestList(int offset, {int limit = 10});
   Future<Response> ongoingTripRequest();
   Future<Response> getFinalFare(String tripId);

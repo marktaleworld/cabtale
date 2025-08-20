@@ -24,6 +24,7 @@ class TripRequestFee extends Model
         'admin_commission',
         'created_at',
         'updated_at',
+        'toll_amount',
     ];
 
     protected $casts = [
@@ -34,7 +35,8 @@ class TripRequestFee extends Model
         'delay_fee' => 'float',
         'vat_tax' => 'float',
         'tips' => 'float',
-        'admin_commission' => 'float'
+        'admin_commission' => 'float',
+        'toll_amount' => 'float',
     ];
 
     public function tripRequest()

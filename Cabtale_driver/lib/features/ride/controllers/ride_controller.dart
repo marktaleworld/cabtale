@@ -38,6 +38,19 @@ class RideController extends GetxController implements GetxService{
   bool isPinVerificationLoading = false;
   String? _rideid;
   String? get rideId => _rideid;
+  double? _tollAmount;
+  double? get tollAmount => _tollAmount;
+
+  void setTollAmount(double? amount) {
+    _tollAmount = amount;
+    if (kDebugMode) print('saved toll => $_tollAmount');
+    update();
+  }
+
+  void clearTollAmount() {
+    _tollAmount = null;
+    update();
+  }
 
   void setRideId(String id){
     _rideid = id;
@@ -380,11 +393,18 @@ class RideController extends GetxController implements GetxService{
     isLoading = true;
     isStatusUpdating = true;
     update();
-    Response response = await rideServiceInterface.tripStatusUpdate(status, id,cancellationCause,dateTime ?? '');
+
+    final double? tollToSend = status == 'completed' ? _tollAmount : null;
+    Response response = await rideServiceInterface.tripStatusUpdate(status, id,cancellationCause,dateTime ?? '', tollAmount: tollToSend);
 
     if (response.statusCode == 200) {
       Get.find<TripController>().othersCancellationController.clear();
       showCustomSnackBar(message.tr, isError: false);
+
+      if (status == 'completed') {
+        clearTollAmount();
+      }
+
       isLoading = false;
     }else{
       isLoading = false;

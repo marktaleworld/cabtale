@@ -75,7 +75,8 @@ class RideService implements RideServiceInterface{
     String? areaId, String extraLatOne = '', String extraLngOne = '', String extraLatTwo = '', String extraLngTwo = '',
     bool extraOne = false, bool extraTwo = false, String? senderName, String? senderPhone, String? senderAddress, String? tripRequestId,
     String? receiverName, String? receiverPhone, String? receiverAddress, String? parcelCategoryId, String? weight, String? payer,
-    double? returnFee, double? cancellationFee
+    double? returnFee, double? cancellationFee, 
+    //DateTime? scheduledAt,
   }) async{
     return await rideRepositoryInterface.submitRideRequest(
         pickupLat: pickupLat, pickupLng: pickupLng, destinationLat: destinationLat, bid: bid,
@@ -84,7 +85,8 @@ class RideService implements RideServiceInterface{
         estimatedTime: estimatedTime, estimatedFare: estimatedFare, note: note, paymentMethod: paymentMethod,
         type: type, pickupAddress: pickupAddress, destinationAddress: destinationAddress,
         encodedPolyline: encodedPolyline, middleAddress: middleAddress, entrance: entrance,
-        tripRequestId: tripRequestId,returnFee: returnFee, cancellationFee: cancellationFee
+        tripRequestId: tripRequestId,returnFee: returnFee, cancellationFee: cancellationFee,
+        //scheduledAt: scheduledAt
     );
   }
 

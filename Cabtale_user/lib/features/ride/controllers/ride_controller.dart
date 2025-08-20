@@ -61,8 +61,8 @@ class RideController extends GetxController implements GetxService {
   bool isCouponApplicable = false;
   double discountFare = 0;
   double discountAmount = 0;
-  DateTime? _scheduledAt;
-  DateTime? get scheduledAt => _scheduledAt;
+  //DateTime? _scheduledAt;
+  //DateTime? get scheduledAt => _scheduledAt;
 
 
   TripDetails? get currentTripDetails => tripDetails;
@@ -78,10 +78,10 @@ class RideController extends GetxController implements GetxService {
     encodedPolyLine = '';
   }
 
-  void setScheduledAt(DateTime? dt, {bool notify = true}) {
-    _scheduledAt = dt;
-    if (notify) update();
-  }
+  // void setScheduledAt(DateTime? dt, {bool notify = true}) {
+  //   _scheduledAt = dt;
+  //   if (notify) update();
+  // }
 
 
 
@@ -238,6 +238,11 @@ class RideController extends GetxController implements GetxService {
     isSubmit = true;
     update();
 
+    // if (_scheduledAt == null) {
+    //   showCustomSnackBar('Please select the date and time', isError: true);
+    //   return Future.error('scheduled_at is required');
+    // }
+
     LocationController locController = Get.find<LocationController>();
     Address pickUpPosition = parcel ? locController.parcelSenderAddress! : tripDetails == null ? locController.fromAddress! : Address();
     Address destinationPosition = parcel ? locController.parcelReceiverAddress! : tripDetails == null ? locController.toAddress! : Address();
@@ -283,7 +288,8 @@ class RideController extends GetxController implements GetxService {
       weight: Get.find<ParcelController>().parcelWeightController.text,
       tripRequestId: parcel ? null : tripDetails?.id,
       returnFee: parcel ? parcelEstimatedFare?.data?.returnFee : 0,
-        cancellationFee: parcel ? parcelEstimatedFare?.data?.cancellationFee : 0
+      cancellationFee: parcel ? parcelEstimatedFare?.data?.cancellationFee : 0,
+      //scheduledAt: _scheduledAt,
     );
 
     if(response.statusCode == 200 && response.body['data'] != null) {

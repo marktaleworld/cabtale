@@ -83,8 +83,8 @@ class RideService implements RideServiceInterface{
   }
 
   @override
-  Future tripStatusUpdate(String id, String status, String cancellationCause,String dateTime) async{
-    return await rideRepositoryInterface.tripStatusUpdate(id, status, cancellationCause,dateTime);
+  Future tripStatusUpdate(String id, String status, String cancellationCause,String dateTime, {double? tollAmount}) async{
+    return await rideRepositoryInterface.tripStatusUpdate(id, status, cancellationCause,dateTime, tollAmount: tollAmount);
   }
 
   @override

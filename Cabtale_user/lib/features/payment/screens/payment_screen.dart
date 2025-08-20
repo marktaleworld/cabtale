@@ -360,7 +360,6 @@ class _PaymentScreenState extends State<PaymentScreen> with WidgetsBindingObserv
                 ]));
               }),
             );
-
         }),
 
         bottomNavigationBar: GetBuilder<PaymentController>(builder: (paymentController) {

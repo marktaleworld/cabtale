@@ -185,6 +185,11 @@ class _TripDetailsState extends State<TripDetails> {
                     amount: rideController.tripDetail!.vatTax ?? 0,
                   ),
 
+                  PaymentItemInfoWidget(
+                    icon: Images.farePrice, title: 'Toll',
+                    amount: rideController.tripDetail!.tollAmount ?? 0,
+                  ),
+
                   if(rideController.tripDetail?.type == 'parcel' && rideController.tripDetail?.currentStatus == 'returning')
                     Divider(color: Theme.of(context).hintColor.withOpacity(0.15)),
 

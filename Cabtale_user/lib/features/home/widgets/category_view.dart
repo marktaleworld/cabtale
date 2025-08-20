@@ -18,38 +18,38 @@ class CategoryView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CategoryController>(builder: (categoryController){
-      // return SizedBox(
-      //   height: 105, width: Get.width,
-      //   child: ListView(
-      //     shrinkWrap: true,
-      //     scrollDirection: Axis.horizontal,
-      //     children: [
-      //       categoryController.categoryList != null ?
-      //       categoryController.categoryList!.isNotEmpty ?
-      //       ListView.builder(
-      //           shrinkWrap: true,
-      //           itemCount: categoryController.categoryList!.length,
-      //           padding: EdgeInsets.zero,
-      //           scrollDirection: Axis.horizontal,
-      //           physics: const NeverScrollableScrollPhysics(),
-      //           itemBuilder: (context, index) {
-      //             return CategoryWidget(index: index,
-      //                 category: categoryController.categoryList![index]);
-      //           }
-      //       ) :
-      //       const SizedBox():
-      //       const CategoryShimmer(),
+      return SizedBox(
+        height: 105, width: Get.width,
+        child: ListView(
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
+          children: [
+            categoryController.categoryList != null ?
+            categoryController.categoryList!.isNotEmpty ?
+            ListView.builder(
+                shrinkWrap: true,
+                itemCount: categoryController.categoryList!.length,
+                padding: EdgeInsets.zero,
+                scrollDirection: Axis.horizontal,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return CategoryWidget(index: index,
+                      category: categoryController.categoryList![index]);
+                }
+            ) :
+            const SizedBox():
+            const CategoryShimmer(),
 
-      //     ],
-      //   ),
-      // );
-      return ButtonWidget(
-              buttonText: 'Book your Ride',
-              // radius: 50,
-              onPressed: () {
-                Get.to(() => const SetDestinationScreen());
-              },
-            );
+          ],
+        ),
+      );
+      // return ButtonWidget(
+      //         buttonText: 'Book your Ride',
+      //         // radius: 50,
+      //         onPressed: () {
+      //           Get.to(() => const SetDestinationScreen());
+      //         },
+      //       );
     });
   }
 }

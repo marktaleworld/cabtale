@@ -74,6 +74,7 @@ class TripDetail {
   double? returnFee;
   double? dueAmount;
   String? returnTime;
+  double? tollAmount;
 
 
   TripDetail(
@@ -134,7 +135,8 @@ class TripDetail {
         this.adminCommission,
         this.returnFee,
         this.dueAmount,
-        this.returnTime
+        this.returnTime,
+        this.tollAmount,
       });
 
   TripDetail.fromJson(Map<String, dynamic> json) {
@@ -146,6 +148,14 @@ class TripDetail {
     estimatedFare = json['estimated_fare'].toString();
     orgEstFare = json['org_est_fare'].toString();
     estimatedTime = json['estimated_time'].toString();
+    
+    if (json['toll_amount'] != null) {
+      try {
+        tollAmount = json['toll_amount'].toDouble();
+      } catch (e) {
+        tollAmount = double.parse(json['toll_amount'].toString());
+      }
+    }
     if(json['estimated_distance'] != null){
       estimatedDistance = json['estimated_distance'].toDouble();
     }
@@ -265,7 +275,6 @@ class TripDetail {
     dueAmount = json['due_amount'].toDouble();
     returnTime = json['return_time'];
   }
-
 
 }
 

@@ -56,6 +56,7 @@ abstract class RideServiceInterface{
         String? tripRequestId,
         double ? returnFee,
         double ? cancellationFee,
+        //DateTime? scheduledAt,
       });
 
   Future<dynamic> getRideDetails(String tripId);

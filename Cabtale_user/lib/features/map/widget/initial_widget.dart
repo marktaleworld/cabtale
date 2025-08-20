@@ -65,7 +65,7 @@ class _InitialWidgetState extends State<InitialWidget> {
             extraTwoAddress: locationController.extraRouteTwoAddress?.address ?? '',
             toAddress: locationController.toAddress?.address??'',
             entrance: locationController.entranceController.text,
-            scheduledAt: Get.find<RideController>().scheduledAt,
+            //scheduledAt: Get.find<RideController>().scheduledAt,
           ),
           const SizedBox(height: Dimensions.paddingSizeDefault),
 
@@ -115,8 +115,8 @@ class _InitialWidgetState extends State<InitialWidget> {
             rideController.estimatedFare.toString(),
           ) :
           ButtonWidget(
-            // buttonText: "find_rider".tr, 
-            buttonText: 'Schedule Ride', 
+            buttonText: "find_rider".tr, 
+            // buttonText: 'Schedule Ride', 
             onPressed: () {
               rideController.submitRideRequest(rideController.noteController.text, false).then((value) {
                 if(value.statusCode == 200) {

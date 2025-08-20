@@ -78,6 +78,7 @@ class TripDetailWidget extends StatelessWidget {
           PaymentItemInfoWidget(icon: Images.coupon, title: 'discount'.tr, amount: tripDetails.discountAmount??0, discount: true,),
           PaymentItemInfoWidget(icon: Images.farePrice,title: 'tips'.tr,amount: tripDetails.tips??0),
           PaymentItemInfoWidget(icon: Images.farePrice,title: 'vat_tax'.tr,amount: tripDetails.vatTax??0),
+          PaymentItemInfoWidget(icon: Images.farePrice,title: 'Toll',amount: tripDetails.tollAmount??0),
           PaymentItemInfoWidget(title: 'sub_total'.tr,amount: tripDetails.paidFare??0, isSubTotal: true,),
 
           const SizedBox(height: Dimensions.paddingSizeExtraSmall,),

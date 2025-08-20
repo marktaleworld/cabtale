@@ -38,32 +38,32 @@ class SetDestinationScreen extends StatefulWidget {
 class _SetDestinationScreenState extends State<SetDestinationScreen> {
   FocusNode pickLocationFocus = FocusNode();
   FocusNode destinationLocationFocus = FocusNode();
-  DateTime? _scheduledAt; 
+  //DateTime? _scheduledAt; 
 
   String _fmt(BuildContext c, DateTime dt) {
     final l = MaterialLocalizations.of(c);
     return '${l.formatFullDate(dt)}, ${l.formatTimeOfDay(TimeOfDay(hour: dt.hour, minute: dt.minute))}';
   }
 
-  static const Duration _minLead = Duration(minutes: 30);
-  static const Duration _maxWindow = Duration(days: 90);
+  // static const Duration _minLead = Duration(minutes: 30);
+  // static const Duration _maxWindow = Duration(days: 90);
 
-  bool _validateSchedule(DateTime? dt) {
-    if (dt == null) {
-      showCustomSnackBar('Please select the date and time', isError: true);
-      return false;
-    }
-    final now = DateTime.now();
-    if (dt.isBefore(now.add(_minLead))) {
-      showCustomSnackBar('Time must be at least 30 minutes from now', isError: true);
-      return false;
-    }
-    if (dt.isAfter(now.add(_maxWindow))) {
-      showCustomSnackBar('You can schedule a maximum of 90 days from today', isError: true);
-      return false;
-    }
-    return true;
-  }
+  // bool _validateSchedule(DateTime? dt) {
+  //   if (dt == null) {
+  //     showCustomSnackBar('Please select the date and time', isError: true);
+  //     return false;
+  //   }
+  //   final now = DateTime.now();
+  //   if (dt.isBefore(now.add(_minLead))) {
+  //     showCustomSnackBar('Time must be at least 30 minutes from now', isError: true);
+  //     return false;
+  //   }
+  //   if (dt.isAfter(now.add(_maxWindow))) {
+  //     showCustomSnackBar('You can schedule a maximum of 90 days from today', isError: true);
+  //     return false;
+  //   }
+  //   return true;
+  // }
 
 
   @override
@@ -409,83 +409,83 @@ class _SetDestinationScreenState extends State<SetDestinationScreen> {
 
                               const SizedBox(width: Dimensions.paddingSizeSmall),
 
-                              InkWell(
-                                onTap: () async {
-                                  if (rideController.rideDetails != null) {
-                                    showCustomSnackBar('your_ride_is_ongoing_complete'.tr, isError: true);
-                                    return;
-                                  }
-                                  final now = DateTime.now();
-                                    final picked = await showDateTimePicker(
-                                      context: context,
-                                      firstDate: now,                          
-                                      lastDate: now.add(_maxWindow),           
-                                      initialDate: _scheduledAt ?? now,        
-                                    );
+                              // InkWell(
+                              //   onTap: () async {
+                              //     if (rideController.rideDetails != null) {
+                              //       showCustomSnackBar('your_ride_is_ongoing_complete'.tr, isError: true);
+                              //       return;
+                              //     }
+                              //     final now = DateTime.now();
+                              //       final picked = await showDateTimePicker(
+                              //         context: context,
+                              //         firstDate: now,                          
+                              //         lastDate: now.add(_maxWindow),           
+                              //         initialDate: _scheduledAt ?? now,        
+                              //       );
 
-                                    if (!mounted) return;
-                                    if (picked == null) return;
+                              //       if (!mounted) return;
+                              //       if (picked == null) return;
 
-                                    if (_validateSchedule(picked)) { 
-                                      setState(() => _scheduledAt = picked);
-                                      Get.find<RideController>().setScheduledAt(picked);
-                                    }
-                                  },
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.schedule, color: Colors.white.withOpacity(0.7)),
-                                    const SizedBox(width: 4),
-                                    _scheduledAt != null ?
-                                      Text(
-                                        '${MaterialLocalizations.of(context).formatFullDate(_scheduledAt!)} '
-                                        '${MaterialLocalizations.of(context).formatTimeOfDay(TimeOfDay.fromDateTime(_scheduledAt!))}',
-                                        style: const TextStyle(color: Colors.white),
-                                      ) : const Text(
-                                        'Select Date and Time',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                  ],
-                                ),
-                              ),
+                              //       if (_validateSchedule(picked)) { 
+                              //         setState(() => _scheduledAt = picked);
+                              //         Get.find<RideController>().setScheduledAt(picked);
+                              //       }
+                              //     },
+                              //   child: Row(
+                              //     children: [
+                              //       Icon(Icons.schedule, color: Colors.white.withOpacity(0.7)),
+                              //       const SizedBox(width: 4),
+                              //       _scheduledAt != null ?
+                              //         Text(
+                              //           '${MaterialLocalizations.of(context).formatFullDate(_scheduledAt!)} '
+                              //           '${MaterialLocalizations.of(context).formatTimeOfDay(TimeOfDay.fromDateTime(_scheduledAt!))}',
+                              //           style: const TextStyle(color: Colors.white),
+                              //         ) : const Text(
+                              //           'Select Date and Time',
+                              //           style: TextStyle(color: Colors.white),
+                              //         ),
+                              //     ],
+                              //   ),
+                              // ),
 
                               const SizedBox(width: Dimensions.paddingSizeSmall),
                              
 
-                              // locationController.addEntrance ?
-                              // SizedBox(width: 200, child: InputField(
-                              //   showSuffix: false,
-                              //   controller: locationController.entranceController,
-                              //   node: locationController.entranceNode,
-                              //   hint: 'enter_entrance'.tr,
-                              // )) :
-                              // InkWell(
-                              //   onTap: () => locationController.setAddEntrance(),
-                              //   child: Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
-                              //     SizedBox(height: 25, child: Transform(
-                              //       alignment: Alignment.center,
-                              //       transform: Get.find<LocalizationController>().isLtr ?
-                              //       Matrix4.rotationY(0) :
-                              //       Matrix4.rotationY(math.pi),
-                              //       child: Image.asset(Images.curvedArrow),
-                              //     )),
-                              //     const SizedBox(width: Dimensions.paddingSizeSmall),
+                              locationController.addEntrance ?
+                              SizedBox(width: 200, child: InputField(
+                                showSuffix: false,
+                                controller: locationController.entranceController,
+                                node: locationController.entranceNode,
+                                hint: 'enter_entrance'.tr,
+                              )) :
+                              InkWell(
+                                onTap: () => locationController.setAddEntrance(),
+                                child: Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
+                                  SizedBox(height: 25, child: Transform(
+                                    alignment: Alignment.center,
+                                    transform: Get.find<LocalizationController>().isLtr ?
+                                    Matrix4.rotationY(0) :
+                                    Matrix4.rotationY(math.pi),
+                                    child: Image.asset(Images.curvedArrow),
+                                  )),
+                                  const SizedBox(width: Dimensions.paddingSizeSmall),
 
-                              //     Row(crossAxisAlignment: CrossAxisAlignment.end,children: [
-                              //       const Icon(Icons.add, color: Colors.white),
+                                  Row(crossAxisAlignment: CrossAxisAlignment.end,children: [
+                                    const Icon(Icons.add, color: Colors.white),
 
-                              //       Padding(
-                              //         padding: const EdgeInsets.only(top: Dimensions.paddingSizeDefault),
-                              //         child: Text(
-                              //           'add_entrance'.tr,
-                              //           style: textMedium.copyWith(
-                              //             color: Colors.white.withOpacity(.75),
-                              //             fontSize: Dimensions.fontSizeLarge,
-                              //           ),
-                              //         ),
-                              //       ),
-                              //     ]),
-                              //   ]),
-                              // ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: Dimensions.paddingSizeDefault),
+                                      child: Text(
+                                        'add_entrance'.tr,
+                                        style: textMedium.copyWith(
+                                          color: Colors.white.withOpacity(.75),
+                                          fontSize: Dimensions.fontSizeLarge,
+                                        ),
+                                      ),
+                                    ),
+                                  ]),
+                                ]),
+                              ),
                             ]),
                           )),
                         ]),
@@ -497,8 +497,8 @@ class _SetDestinationScreenState extends State<SetDestinationScreen> {
                           ),
                           child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                             Text(
-                              'You can schedule your ride',
-                              // 'you_can_add_multiple_route_to'.tr,
+                              // 'You can schedule your ride',
+                              'you_can_add_multiple_route_to'.tr,
                               style: textRegular.copyWith(
                                 fontSize: Dimensions.fontSizeSmall,
                                 color: Colors.white.withOpacity(.75),
@@ -529,10 +529,12 @@ class _SetDestinationScreenState extends State<SetDestinationScreen> {
                                   }else if(locationController.destinationLocationController.text.isEmpty) {
                                     showCustomSnackBar('destination_location_is_required'.tr);
                                     FocusScope.of(context).requestFocus(destinationLocationFocus);
-                                  }else if(_scheduledAt == null) {
-                                    showCustomSnackBar('Please select the date and time', isError: true);
-                                    return;
-                                  }else{
+                                  }
+                                  // else if(_scheduledAt == null) {
+                                  //   showCustomSnackBar('Please select the date and time', isError: true);
+                                  //   return;
+                                  // }
+                                  else{
                                     rideController.getEstimatedFare(false).then((value) {
                                       if(value.statusCode == 200) {
                                         Get.find<LocationController>().initAddLocationData();

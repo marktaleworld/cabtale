@@ -27,6 +27,7 @@ class CreateTripRequestFeesTable extends Migration
             $table->decimal('tips', 23 ,3)->default(0);
             $table->decimal('admin_commission', 23 ,3)->default(0);
             $table->timestamps();
+            $table->decimal('toll_amount', 23, 3)->default(0);
         });
     }
 

@@ -63,6 +63,7 @@ class FinalFare {
   double? idleTime;
   double? actualTime;
   double? estimatedTime;
+  double? tollAmount;
 
   FinalFare(
       {this.id,
@@ -107,7 +108,9 @@ class FinalFare {
         this.delayTime,
         this.idleTime,
         this.actualTime,
-        this.estimatedTime});
+        this.estimatedTime,
+        this.tollAmount
+      });
 
   FinalFare.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -141,6 +144,18 @@ class FinalFare {
       discountAmount = json['discount_amount'].toDouble();
     }else{
       discountAmount = 0;
+    }
+
+    final fee = json['fee'];
+    final tollTopLevel = json['toll_amount'];
+    final tollNested = (fee is Map<String, dynamic>) ? fee['toll_amount'] : null;
+
+    if (tollTopLevel != null) {
+      tollAmount = (tollTopLevel as num).toDouble();
+    } else if (tollNested != null) {
+      tollAmount = (tollNested as num).toDouble();
+    } else {
+      tollAmount = 0;
     }
 
     note = json['note'];

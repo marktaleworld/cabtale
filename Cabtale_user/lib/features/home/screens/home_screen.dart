@@ -154,7 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     const SizedBox(height: Dimensions.paddingSizeDefault)
                                   ],
 
-                                  // const HomeSearchWidget(),
+                                  const HomeSearchWidget(),
                                 ]),
                               ),
                               const SizedBox(height:Dimensions.paddingSizeDefault),

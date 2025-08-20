@@ -339,13 +339,15 @@ class TripRequestController extends Controller
             'status' => 'required',
             'trip_request_id' => 'required',
             'return_time' => 'sometimes',
+            'toll_amount'     => 'sometimes|numeric|min:0', 
         ]);
 
         if ($validator->fails()) {
             return response()->json(responseFormatter(constant: DEFAULT_400, errors: errorProcessor($validator)), 403);
         }
         $user = auth('api')->user();
-        $trip = $this->trip->getBy(column: 'id', value: $request['trip_request_id'], attributes: ['relations' => 'customer']);
+        $trip = $this->trip->getBy(column: 'id', value: $request['trip_request_id'], 
+            attributes: ['relations' => 'customer']);
         if (!$trip) {
             return response()->json(responseFormatter(constant: TRIP_REQUEST_404), 403);
         }
@@ -362,7 +364,6 @@ class TripRequestController extends Controller
             return response()->json(responseFormatter(TRIP_STATUS_RETURNING_403), 403);
         }
         if ($trip->is_paused) {
-
             return response()->json(responseFormatter(TRIP_REQUEST_PAUSED_404), 403);
         }
 
@@ -372,7 +373,24 @@ class TripRequestController extends Controller
             'trip_status' => $request['status'],
             'trip_cancellation_reason' => $request['cancel_reason'] ?? null
         ];
+
         DB::beginTransaction();
+
+        if ($request->status === 'completed' && $request->has('toll_amount')) {
+            try {
+                $trip->fee()->updateOrCreate(
+                    ['trip_request_id' => $trip->id],
+                    ['toll_amount' => (float) $request->toll_amount]
+                );
+            } catch (\Throwable $e) {
+                \Log::error('Failed to save toll amount', [
+                    'trip_id'     => $trip->id,
+                    'toll_amount' => $request->toll_amount,
+                    'error'       => $e->getMessage(),
+                ]);
+            }
+        }
+
         if ($request->status == 'completed' || $request->status == 'cancelled') {
             if ($request->status == 'cancelled') {
                 $attributes['fee']['cancelled_by'] = 'driver';

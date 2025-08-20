@@ -57,6 +57,7 @@ abstract class RideRepositoryInterface implements RepositoryInterface{
         String? tripRequestId,
         double? returnFee,
         double? cancellationFee,
+        //DateTime? scheduledAt,
       });
 
   Future<dynamic> getRideDetails(String tripId);
