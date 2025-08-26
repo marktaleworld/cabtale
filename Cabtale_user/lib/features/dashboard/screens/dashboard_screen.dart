@@ -31,26 +31,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final List<NavigationModel> item = [
       NavigationModel(
         name: 'home'.tr,
-        activeIcon: Images.homeActive,
-        inactiveIcon: Images.homeOutline,
+        activeIcon: Images.homingActive,
+        inactiveIcon: Images.homingOutlaned,
         screen: const HomeScreen(),
       ),
       NavigationModel(
         name: 'activity'.tr,
-        activeIcon: Images.activityActive,
-        inactiveIcon: Images.activityOutline,
+        activeIcon: Images.activityActived,
+        inactiveIcon: Images.activityOutlaned,
         screen: const TripScreen(fromProfile: false),
       ),
       NavigationModel(
         name: 'notification'.tr,
-        activeIcon: Images.notificationActive,
-        inactiveIcon: Images.notificationOutline,
+        activeIcon: Images.notificationStatusActived,
+        inactiveIcon: Images.notificationStatusOutlined,
         screen: const NotificationScreen(),
       ),
       NavigationModel(
         name: 'profile'.tr,
-        activeIcon: Images.profileActive,
-        inactiveIcon: Images.profileOutline,
+        activeIcon: Images.profileActiveIcon,
+        inactiveIcon: Images.profileOutlineIcon,
         screen: const ProfileScreen(),
       ),
     ];
@@ -76,9 +76,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
             PageStorage(bucket: bucket, child: item[menuController.currentTab].screen),
             
             Positioned(child: Align(alignment: Alignment.bottomCenter,
-              child: Padding(padding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
-                child: Container(height: 65,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),
+              child: Padding(padding: const EdgeInsets.all(Dimensions.paddingSizeExtraLarge),
+                child: Container(height: 85,
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),
                     color: Theme.of(context).primaryColor,
                     boxShadow: [BoxShadow(offset: const Offset(0,4), blurRadius: 3, color: Colors.black.withOpacity(0.3))],
                   ),

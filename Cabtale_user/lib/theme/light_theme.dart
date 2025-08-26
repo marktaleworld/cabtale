@@ -6,8 +6,8 @@ ThemeData lightTheme({Color color = AppConstants.lightPrimary}) => ThemeData(
   primaryColor: color,
   primaryColorDark: const Color(0xFF09331E),
   disabledColor: const Color(0xFFBABFC4),
-  dialogBackgroundColor: const Color(0xFFF5F2E5),
-  scaffoldBackgroundColor: const Color(0xFF08351F),
+  dialogBackgroundColor: const Color.fromARGB(255, 255, 255, 255),
+  scaffoldBackgroundColor: Color.fromARGB(255, 3, 38, 21),
   shadowColor: Colors.black.withOpacity(0.03),
   textTheme:  const TextTheme(
     bodyMedium: TextStyle(color: Color(0xff1D2D2B)),
@@ -27,12 +27,12 @@ ThemeData lightTheme({Color color = AppConstants.lightPrimary}) => ThemeData(
 
   brightness: Brightness.light,
   hintColor: const Color(0xFF9F9F9F),
-  cardColor: const Color(0xFFF5F2E5),
+  cardColor: const Color.fromARGB(255, 251, 251, 251),
   colorScheme: const ColorScheme.light(
       primary: Color(0xFF1C1C1C),
       //  secondary: Color(0xFF008C7B),
       error: Color(0xFFFF6767),
-      surface: Color(0xFFF5F2E5),
+      surface: Color.fromARGB(255, 240, 240, 240),
       tertiary: Color(0xFF1B5939),
       tertiaryContainer: Color(0xFFC98B3E),
       secondaryContainer: Color(0xFFEE6464),

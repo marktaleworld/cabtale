@@ -164,6 +164,16 @@ class Images {
   static const String notificationEarningIcon = 'assets/image/notification_earning_icon.png';
   static const String notificationReferralIcon = 'assets/image/notification_referral_icon.png';
 
+  //updated icons dashboard
+  static const String notificationStatusOutlined = 'assets/image/notification-status-outline.png';
+  static const String notificationStatusActived = 'assets/image/notification-status-active.png';
+  static const String profileOutlineIcon = 'assets/image/profile-oulaned.png';
+  static const String profileActiveIcon = 'assets/image/profile-active.png';
+  static const String homingOutlaned = 'assets/image/homing-outlaned.png';
+  static const String homingActive = 'assets/image/homing-active.png';
+  static const String activityOutlaned = 'assets/image/activity-outlaned.png';
+  static const String activityActived = 'assets/image/activity-active.png';
+
   //svg
 
   static const String animatedCar = 'assets/svg/animated_car.svg';

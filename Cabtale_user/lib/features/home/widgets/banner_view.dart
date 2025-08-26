@@ -24,56 +24,104 @@ class _BannerViewState extends State<BannerView> {
     return GetBuilder<BannerController>(
       builder: (bannerController) {
 
-        return  bannerController.bannerList != null? bannerController.bannerList!.isNotEmpty?
-        Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-            SizedBox(height: 130, width: MediaQuery.of(context).size.width,
-              child: CarouselSlider.builder(
-                options: CarouselOptions(
-                  autoPlay: true,
-                  enlargeCenterPage: false,
-                  viewportFraction: 1,
-                  disableCenter: true,
-                  autoPlayInterval: const Duration(seconds: 7),
-                  onPageChanged: (index, reason) {
-                    activeIndex = index;
-                    setState(() {
-                    });
+        // return  bannerController.bannerList != null? bannerController.bannerList!.isNotEmpty?
+        // Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+        //     SizedBox(height: 130, width: MediaQuery.of(context).size.width,
+        //       child: CarouselSlider.builder(
+        //         options: CarouselOptions(
+        //           autoPlay: true,
+        //           enlargeCenterPage: false,
+        //           viewportFraction: 1,
+        //           disableCenter: true,
+        //           autoPlayInterval: const Duration(seconds: 7),
+        //           onPageChanged: (index, reason) {
+        //             activeIndex = index;
+        //             setState(() {
+        //             });
+        //           },
+        //         ),
+        //         itemCount: bannerController.bannerList!.length,
+        //         itemBuilder: (context, index, _) {
+        //           return InkWell(onTap: (){
+        //             bannerController.updateBannerClickCount(bannerController.bannerList![index].id!);
+        //             debugPrint("=click===> ${bannerController.bannerList![index].redirectLink!}");
+        //             if(bannerController.bannerList![index].redirectLink != null){
+        //               _launchUrl(Uri.parse(bannerController.bannerList![index].redirectLink!));
+        //             }},
+        //             child: Padding(
+        //               padding: const EdgeInsets.symmetric(horizontal: 2),
+        //               child: ClipRRect(borderRadius: BorderRadius.circular(Dimensions.radiusOverLarge),
+        //                 child: ImageWidget(image: '$baseurl/${bannerController.bannerList![index].image}', fit: BoxFit.cover)),
+        //             ),
+        //           );
+        //         },
+        //       ),
+        //     ),
+
+        //   const SizedBox(height: Dimensions.paddingSizeExtraSmall,),
+        //   SizedBox(height: 5,width: Get.width,
+        //     child: Center(child: ListView.separated(shrinkWrap: true,padding: EdgeInsets.zero,scrollDirection: Axis.horizontal,
+        //       itemCount: bannerController.bannerList!.length,itemBuilder: (context,index){
+        //         return Center(child: Container(height: 5,width: index == activeIndex ? 10 : 5,decoration: BoxDecoration(
+        //             color: Theme.of(context).primaryColor,
+        //             borderRadius: BorderRadius.circular(100)
+        //         ),));},
+
+        //       separatorBuilder: (context,index){
+        //         return const Padding(padding: EdgeInsets.only(right: Dimensions.paddingSizeExtraSmall));
+        //       },
+        //     ),
+        //     ),)
+        //   ],
+        // ):const SizedBox() : const BannerShimmer();
+        return bannerController.bannerList != null && bannerController.bannerList!.isNotEmpty
+        ? Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 130,
+                width: MediaQuery.of(context).size.width,
+                child: CarouselSlider.builder(
+                  options: CarouselOptions(
+                    autoPlay: true,
+                    enlargeCenterPage: false,
+                    viewportFraction: 1,
+                    disableCenter: true,
+                    autoPlayInterval: const Duration(seconds: 7),
+                    onPageChanged: (index, reason) {
+                      activeIndex = index;
+                      setState(() {});
+                    },
+                  ),
+                  itemCount: bannerController.bannerList!.length,
+                  itemBuilder: (context, index, _) {
+                    return InkWell(
+                      onTap: () {
+                        bannerController.updateBannerClickCount(
+                            bannerController.bannerList![index].id!);
+                        if (bannerController.bannerList![index].redirectLink != null) {
+                          _launchUrl(
+                              Uri.parse(bannerController.bannerList![index].redirectLink!));
+                        }
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 2),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+                          child: ImageWidget(
+                            image: '$baseurl/${bannerController.bannerList![index].image}',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    );
                   },
                 ),
-                itemCount: bannerController.bannerList!.length,
-                itemBuilder: (context, index, _) {
-                  return InkWell(onTap: (){
-                    bannerController.updateBannerClickCount(bannerController.bannerList![index].id!);
-                    debugPrint("=click===> ${bannerController.bannerList![index].redirectLink!}");
-                    if(bannerController.bannerList![index].redirectLink != null){
-                      _launchUrl(Uri.parse(bannerController.bannerList![index].redirectLink!));
-                    }},
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 2),
-                      child: ClipRRect(borderRadius: BorderRadius.circular(Dimensions.radiusOverLarge),
-                        child: ImageWidget(image: '$baseurl/${bannerController.bannerList![index].image}', fit: BoxFit.cover)),
-                    ),
-                  );
-                },
               ),
-            ),
+            ],
+          )
+        : const BannerShimmer();
 
-          const SizedBox(height: Dimensions.paddingSizeExtraSmall,),
-          SizedBox(height: 5,width: Get.width,
-            child: Center(child: ListView.separated(shrinkWrap: true,padding: EdgeInsets.zero,scrollDirection: Axis.horizontal,
-              itemCount: bannerController.bannerList!.length,itemBuilder: (context,index){
-                return Center(child: Container(height: 5,width: index == activeIndex ? 10 : 5,decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(100)
-                ),));},
-
-              separatorBuilder: (context,index){
-                return const Padding(padding: EdgeInsets.only(right: Dimensions.paddingSizeExtraSmall));
-              },
-            ),
-            ),)
-          ],
-        ):const SizedBox() : const BannerShimmer();
       },
     );
   }

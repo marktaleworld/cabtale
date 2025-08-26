@@ -141,25 +141,26 @@ class _HomeScreenState extends State<HomeScreen> {
                                   top:Dimensions.paddingSize,left: Dimensions.paddingSize,
                                   right: Dimensions.paddingSize,
                                 ),
+                                
                                 child: Column(children: [
+                                  const SizedBox(height: 10),
+                                  const HomeSearchWidget(),
+                                  
+                                  const SizedBox(height: 20),
                                   const BannerView(),
-
+                                  const SizedBox(height: 10),
                                   const Padding(
-                                    padding: EdgeInsets.only(top:Dimensions.paddingSize),
-                                    child: CategoryView(),
+                                    padding: EdgeInsets.only(top: Dimensions.paddingSize),
+                                      child: CategoryView(),
                                   ),
-
                                   if((Get.find<ConfigController>().config?.externalSystem ?? false) && Get.find<AuthController>().isLoggedIn())...[
                                     const VisitToMartWidget(),
                                     const SizedBox(height: Dimensions.paddingSizeDefault)
                                   ],
-
-                                  const HomeSearchWidget(),
                                 ]),
                               ),
-                              const SizedBox(height:Dimensions.paddingSizeDefault),
-
-                              const HomeMyAddress(addressPage: AddressPage.home),
+                              //const SizedBox(height:Dimensions.paddingSizeDefault),
+                              //const HomeMyAddress(addressPage: AddressPage.home),
 
                               const Padding(
                                 padding: EdgeInsets.only(
@@ -324,7 +325,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     child: Padding(padding: const EdgeInsets.all(8.0),
                                       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text('parcel_delivery'.tr),
+                                          //Text('parcel_delivery'.tr),
 
                                           CircleAvatar(
                                             radius: 10,
@@ -394,8 +395,3 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 }
-
-
-
-
-

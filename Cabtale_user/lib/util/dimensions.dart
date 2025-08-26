@@ -30,7 +30,7 @@ class Dimensions {
   static const double webMaxWidth = 1170;
   static const double identityImageWidth = 130;
   static const double identityImageHeight = 80;
-  static const double menuIconSize = 25;
+  static const double menuIconSize = 30;
 
 
   static const double searchBarSize = 50;

@@ -195,9 +195,36 @@ class _SetDestinationScreenState extends State<SetDestinationScreen> {
                                         ));
                                       }
                                     },
-                                    child: Icon(Icons.place_outlined, color: Colors.white.withOpacity(0.7)),
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                      decoration: BoxDecoration(
+                                        color: Theme.of(context).colorScheme.onSecondary.withOpacity(.100),
+                                        borderRadius: BorderRadius.circular(10),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withOpacity(0.3),
+                                            blurRadius: 4,
+                                            offset: const Offset(0, 2),
+                                          ),
+                                        ],
+                                      ),
+                                      child: const Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(Icons.place_outlined, color: Colors.white, size: 20),
+                                          SizedBox(width: 8),
+                                          Text(
+                                            "Set on map",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
-
                                 ]),
                               ),
 
@@ -379,7 +406,38 @@ class _SetDestinationScreenState extends State<SetDestinationScreen> {
                                               );
                                             }
                                           },
-                                          child: Icon(Icons.place_outlined, color: Colors.white.withOpacity(0.7)),
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                                            decoration: BoxDecoration(
+                                              color: Theme.of(context).colorScheme.onSecondary.withOpacity(.100),
+                                              borderRadius: BorderRadius.circular(10), 
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.black.withOpacity(0.3),
+                                                  blurRadius: 4,
+                                                  offset: const Offset(0, 2),
+                                                ),
+                                              ],
+                                              ),
+                                                child: const Row(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: [
+                                                    Icon(
+                                                      Icons.place_outlined,
+                                                      color: Colors.white, 
+                                                    ),
+                                                    SizedBox(width: 6),
+                                                    Text(
+                                                      "Set on map",
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 14,
+                                                        fontWeight: FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
                                         ),
                                     ]),
                                   ),

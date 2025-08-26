@@ -52,7 +52,7 @@ class CustomTextField extends StatefulWidget {
         this.capitalization = TextCapitalization.none,
         this.isPassword = false,
         this.isAmount = false,
-        this.borderRadius=50,
+        this.borderRadius=10,
         this.showBorder = true,
         this.prefixHeight = 30,
         this.countryDialCode,

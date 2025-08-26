@@ -42,7 +42,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         elevation: 0,
         scrolledUnderElevation: 0,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor ,
-        toolbarHeight: 80,
+        toolbarHeight: 95,
         automaticallyImplyLeading: false,
         title: InkWell(
           onTap: isHome ? () {

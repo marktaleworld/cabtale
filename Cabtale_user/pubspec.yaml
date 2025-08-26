@@ -56,6 +56,8 @@ dependencies:
   share_plus: ^10.0.0
   flutter_phone_direct_caller: ^2.2.1
   gauge_indicator: ^0.4.3
+  video_player: ^2.10.0
+  animated_text_kit: ^4.2.3
 
 dependency_overrides:
   flutter_inappwebview_ios:
@@ -91,6 +93,7 @@ flutter:
     - assets/language/
     - assets/svg/
     - assets/map/
+    - assets/animation/
 
   fonts:
     - family: SFProText
@@ -107,3 +110,4 @@ flutter:
           weight: 700
         - asset: assets/font/sf-pro-text-heavy.ttf
           weight: 900
+

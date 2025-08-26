@@ -17,39 +17,54 @@ class CategoryView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<CategoryController>(builder: (categoryController){
-      return SizedBox(
-        height: 105, width: Get.width,
-        child: ListView(
-          shrinkWrap: true,
-          scrollDirection: Axis.horizontal,
-          children: [
-            categoryController.categoryList != null ?
-            categoryController.categoryList!.isNotEmpty ?
-            ListView.builder(
-                shrinkWrap: true,
-                itemCount: categoryController.categoryList!.length,
-                padding: EdgeInsets.zero,
-                scrollDirection: Axis.horizontal,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return CategoryWidget(index: index,
-                      category: categoryController.categoryList![index]);
-                }
-            ) :
-            const SizedBox():
-            const CategoryShimmer(),
+    return GetBuilder<CategoryController>(builder: (categoryController) {
+      final list = categoryController.categoryList;
 
-          ],
+      if (list == null) {
+        return const SizedBox(
+          height: 105,
+          child: CategoryShimmer(),
+        );
+      }
+      if (list.isEmpty) {
+        return const SizedBox(height: 105);
+      }
+
+      const itemWidth = 90.0; 
+      const spacing = 13.0;
+
+      return SizedBox(
+        height: 105,
+        width: double.infinity,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final totalWidth =
+                list.length * itemWidth + (list.length - 1) * spacing;
+
+            if (totalWidth <= constraints.maxWidth) {
+              return Center(
+                child: Wrap(
+                  spacing: spacing,
+                  children: List.generate(
+                    list.length,
+                    (i) => CategoryWidget(index: i, category: list[i]),
+                  ),
+                ),
+              );
+            }
+
+            return ListView.separated(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              scrollDirection: Axis.horizontal,
+              physics: const ClampingScrollPhysics(),
+              itemCount: list.length,
+              separatorBuilder: (_, __) => const SizedBox(width: spacing),
+              itemBuilder: (context, i) =>
+                  CategoryWidget(index: i, category: list[i]),
+            );
+          },
         ),
       );
-      // return ButtonWidget(
-      //         buttonText: 'Book your Ride',
-      //         // radius: 50,
-      //         onPressed: () {
-      //           Get.to(() => const SetDestinationScreen());
-      //         },
-      //       );
     });
   }
 }

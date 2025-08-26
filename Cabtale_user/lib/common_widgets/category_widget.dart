@@ -30,7 +30,7 @@ class CategoryWidget extends StatelessWidget {
         }
       },
       child: SizedBox(child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        Container(height: isSelected != null ? 80 : 70, width: isSelected != null ? 80 : 70,
+        Container(height: isSelected != null ? 80 : 95, width: isSelected != null ? 80 : 100,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
             color:  (isSelected != null && isSelected!) ? Theme.of(context).primaryColor.withOpacity(0.8)

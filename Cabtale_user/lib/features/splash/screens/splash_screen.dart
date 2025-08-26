@@ -7,7 +7,6 @@ import 'package:ride_sharing_user_app/features/onboard/screens/onboarding_screen
 import 'package:ride_sharing_user_app/features/trip/controllers/trip_controller.dart';
 import 'package:ride_sharing_user_app/helper/firebase_helper.dart';
 import 'package:ride_sharing_user_app/helper/pusher_helper.dart';
-import 'package:ride_sharing_user_app/util/images.dart';
 import 'package:ride_sharing_user_app/features/auth/controllers/auth_controller.dart';
 import 'package:ride_sharing_user_app/features/auth/screens/sign_in_screen.dart';
 import 'package:ride_sharing_user_app/features/dashboard/screens/dashboard_screen.dart';
@@ -17,211 +16,203 @@ import 'package:ride_sharing_user_app/features/profile/controllers/profile_contr
 import 'package:ride_sharing_user_app/features/profile/screens/edit_profile_screen.dart';
 import 'package:ride_sharing_user_app/features/splash/controllers/config_controller.dart';
 import 'package:app_links/app_links.dart';
-
+import 'package:video_player/video_player.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
-
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
-  StreamSubscription<List<ConnectivityResult>>? _onConnectivityChanged;
+class _SplashScreenState extends State<SplashScreen> {
   final AppLinks _appLinks = AppLinks();
+  StreamSubscription<List<ConnectivityResult>>? _onConnectivityChanged;
   StreamSubscription? _sub;
-  late AnimationController _controller;
-  late Animation _animation;
 
+  VideoPlayerController? _videoCtrl;
+  bool _videoReady = false;
+  bool _videoDone = false;
+  bool _routeRequested = false;
+  bool _hasNavigated = false;
 
   @override
   void initState() {
     super.initState();
-
-    _controller = AnimationController(vsync: this, duration: const Duration(seconds: 1));
-    _animation = Tween(begin: 0.0, end: 1.0).animate(_controller)
-      ..addListener(() {
-        setState(() {});
-      });
-
-
-    _controller.repeat(max: 1);
-    _controller.forward();
-
+    _initVideo();
     Get.find<ConfigController>().initSharedData();
-
     _checkConnectivity();
   }
 
+  Future<void> _initVideo() async {
+    _videoCtrl = VideoPlayerController.asset('assets/animation/cabtale_splash.mp4');
+    try {
+      await _videoCtrl!.initialize();
+      _videoCtrl!.setLooping(false);
+      setState(() => _videoReady = true);
+      _videoCtrl!.play();
 
-  void _handleIncomingLinks() {
-    Get.find<TripController>().getRideCancellationReasonList();
-    Get.find<TripController>().getParcelCancellationReasonList();
-    FirebaseHelper().subscribeFirebaseTopic();
-    Get.find<ConfigController>().getConfigData().then((value){
-      _appLinks.getInitialLink().then((Uri? uri) {
-        if (uri != null) {
-          _handleUri(uri);
-        }else{
-          _route();
-          if(GetPlatform.isIOS){
-            _sub = _appLinks.uriLinkStream.listen((Uri? uri) {
-              if (uri != null) {
-                _handleUri(uri);
-              }
-            });
-          }
-        }
-      });
-    });
-
-  }
-
-  void _handleUri(Uri uri) {
-    final String? fromMartPhone = uri.queryParameters['phone'];
-    final String? fromMartPassword = uri.queryParameters['password'];
-    final String? fromCountryCode = uri.queryParameters['country_code'];
-    if(Get.find<AuthController>().getUserToken().isNotEmpty){
-      Get.find<ProfileController>().getProfileInfo().then((value) {
-        if(value.statusCode == 200) {
-          Get.find<AuthController>().updateToken();
-          if(Get.find<ProfileController>().profileModel?.data?.phone == '+${fromCountryCode!.trim()}$fromMartPhone'){
-            _route();
-          }else{
-            Get.find<AuthController>().externalLogin('+${fromCountryCode.trim()}', fromMartPhone!, fromMartPassword!);
-          }
+      _videoCtrl!.addListener(() {
+        if (_videoCtrl!.value.isInitialized &&
+            !_videoCtrl!.value.isPlaying &&
+            (_videoCtrl!.value.position >= _videoCtrl!.value.duration)) {
+          _videoDone = true;
+          _tryNavigateAfterVideo();
         }
       });
 
-    }else{
-      Get.find<AuthController>().externalLogin('+${fromCountryCode!.trim()}', fromMartPhone!, fromMartPassword!);
+      Future.delayed(const Duration(seconds: 7), () {
+        if (!_videoDone) {
+          _videoDone = true;
+          _tryNavigateAfterVideo();
+        }
+      });
+    } catch (_) {
+      _videoDone = true;
+      _tryNavigateAfterVideo();
     }
   }
+
   @override
   void dispose() {
-    _controller.dispose();
-     _onConnectivityChanged?.cancel();
+    _videoCtrl?.dispose();
+    _onConnectivityChanged?.cancel();
+    _sub?.cancel();
     super.dispose();
   }
 
-  void _checkConnectivity(){
+  void _checkConnectivity() {
     bool isFirst = true;
-    _onConnectivityChanged = Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> result) {
-      bool isConnected = result.contains(ConnectivityResult.wifi) || result.contains(ConnectivityResult.mobile);
-      if(!isFirst || !isConnected) {
-        ScaffoldMessenger.of(Get.context!).removeCurrentSnackBar();
-        ScaffoldMessenger.of(Get.context!).hideCurrentSnackBar();
+    _onConnectivityChanged = Connectivity().onConnectivityChanged.listen((result) {
+      final isConnected = result.contains(ConnectivityResult.wifi) || result.contains(ConnectivityResult.mobile);
+      if (!isFirst || !isConnected) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: isConnected ? Colors.green : Colors.red,
-          duration: Duration(seconds: isConnected ? 3 : 6000),
-          content: Text(
-            isConnected ? 'connected'.tr : 'no_connection'.tr,
-            textAlign: TextAlign.center,
-          ),
+          duration: Duration(seconds: isConnected ? 3 : 6),
+          content: Text(isConnected ? 'connected'.tr : 'no_connection'.tr, textAlign: TextAlign.center),
         ));
-        if(isConnected) {
-          _handleIncomingLinks();
-        }
-      }else{
-        ScaffoldMessenger.of(Get.context!).removeCurrentSnackBar();
-        ScaffoldMessenger.of(Get.context!).hideCurrentSnackBar();
+        if (isConnected) _handleIncomingLinks();
+      } else {
         _handleIncomingLinks();
       }
       isFirst = false;
     });
   }
 
-  void _route() async {
+  void _handleIncomingLinks() {
+    Get.find<TripController>().getRideCancellationReasonList();
+    Get.find<TripController>().getParcelCancellationReasonList();
+    FirebaseHelper().subscribeFirebaseTopic();
 
-    if(Get.find<AuthController>().getUserToken().isNotEmpty){
+    Get.find<ConfigController>().getConfigData().then((_) async {
+      final Uri? initial = await _appLinks.getInitialLink();
+      if (initial != null) {
+        _handleUri(initial);
+      } else {
+        _route();
+        if (GetPlatform.isIOS) {
+          _sub = _appLinks.uriLinkStream.listen((Uri? uri) {
+            if (uri != null) _handleUri(uri);
+          });
+        }
+      }
+    });
+  }
+
+  void _handleUri(Uri uri) {
+    final phone = uri.queryParameters['phone'];
+    final pass = uri.queryParameters['password'];
+    final code = uri.queryParameters['country_code'];
+
+    if (Get.find<AuthController>().getUserToken().isNotEmpty) {
+      Get.find<ProfileController>().getProfileInfo().then((value) {
+        if (value.statusCode == 200) {
+          Get.find<AuthController>().updateToken();
+          if (Get.find<ProfileController>().profileModel?.data?.phone == '+${code!.trim()}$phone') {
+            _route();
+          } else {
+            Get.find<AuthController>().externalLogin('+${code!.trim()}', phone!, pass!);
+            _route();
+          }
+        }
+      });
+    } else {
+      Get.find<AuthController>().externalLogin('+${code!.trim()}', phone!, pass!);
+      _route();
+    }
+  }
+
+  void _route() {
+    _routeRequested = true;
+    _tryNavigateAfterVideo();
+  }
+
+  void _tryNavigateAfterVideo() {
+    if (_hasNavigated || !_routeRequested || !_videoDone) return;
+    _hasNavigated = true;
+
+    if (Get.find<AuthController>().getUserToken().isNotEmpty) {
       PusherHelper.initilizePusher();
     }
 
     Future.delayed(const Duration(milliseconds: 100), () {
-      if(Get.find<AuthController>().isLoggedIn()) {
-        forLoginUserRoute();
-      }else{
-        forNotLoginUserRoute();
+      if (Get.find<AuthController>().isLoggedIn()) {
+        _forLoginUserRoute();
+      } else {
+        _forNotLoginUserRoute();
       }
     });
-
   }
 
-  void forNotLoginUserRoute(){
-    if(Get.find<ConfigController>().config!.maintenanceMode != null &&
-        Get.find<ConfigController>().config!.maintenanceMode!.maintenanceStatus == 1 &&
-        Get.find<ConfigController>().config!.maintenanceMode!.selectedMaintenanceSystem!.userApp == 1
-    ){
+  void _forNotLoginUserRoute() {
+    final cfg = Get.find<ConfigController>().config;
+    if (cfg?.maintenanceMode != null &&
+        cfg!.maintenanceMode!.maintenanceStatus == 1 &&
+        cfg.maintenanceMode!.selectedMaintenanceSystem!.userApp == 1) {
       Get.offAll(() => const MaintenanceScreen());
-    }else{
-      if (Get.find<ConfigController>().showIntro()) {
-        Get.offAll(() => const OnBoardingScreen());
-      }else {
-        Get.offAll(() => const SignInScreen());
-      }
+    } else if (Get.find<ConfigController>().showIntro()) {
+      Get.offAll(() => const OnBoardingScreen());
+    } else {
+      Get.offAll(() => const SignInScreen());
     }
   }
 
-  void forLoginUserRoute(){
-    if(Get.find<LocationController>().getUserAddress() != null
-        && Get.find<LocationController>().getUserAddress()!.address != null
-        && Get.find<LocationController>().getUserAddress()!.address!.isNotEmpty) {
-
+  void _forLoginUserRoute() {
+    final loc = Get.find<LocationController>().getUserAddress();
+    if (loc != null && loc.address != null && loc.address!.isNotEmpty) {
       Get.find<ProfileController>().getProfileInfo().then((value) {
-        if(value.statusCode == 200) {
+        if (value.statusCode == 200) {
           Get.find<AuthController>().updateToken();
-          if(value.body['data']['is_profile_verified'] == 1) {
+          if (value.body['data']['is_profile_verified'] == 1) {
             Get.find<AuthController>().remainingFindingRideTime();
-            Get.offAll(()=> const DashboardScreen());
-            // Get.find<RideController>().getCurrentRideStatus();
-          }else {
+            Get.offAll(() => const DashboardScreen());
+          } else {
             Get.offAll(() => const EditProfileScreen(fromLogin: true));
           }
         }
       });
-
-    }else{
+    } else {
       Get.offAll(() => const AccessLocationScreen());
     }
   }
 
   @override
   Widget build(BuildContext context) {
-
+    final bg = Get.isDarkMode ? const Color(0xFF000000) : Theme.of(context).primaryColorDark;
     return Scaffold(
       body: Container(
-        //decoration: BoxDecoration(color: Theme.of(context).primaryColorDark),
-        decoration: Get.isDarkMode ?  BoxDecoration(color: const Color(0xFF000000)) : BoxDecoration(color: Theme.of(context).primaryColorDark),
-        alignment: Alignment.bottomCenter,
-        child: Column(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.end, children: [
-
-          Stack(alignment: AlignmentDirectional.bottomCenter, children: [
-
-            Container(
-              transform: Matrix4.translationValues(0, 320 - (320 * double.tryParse(_animation.value.toString())!), 0),
-              child: Column(children: [
-                Opacity(
-                  opacity: _animation.value,
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 120 - ((120 * double.tryParse(_animation.value.toString())!))),
-                    child: Image.asset(Images.splashLogo,width: 160),
-                  ),
+        color: bg,
+        width: double.infinity,
+        height: double.infinity,
+        child: _videoReady && _videoCtrl != null
+            ? FittedBox(
+                fit: BoxFit.cover,
+                child: SizedBox(
+                  width: _videoCtrl!.value.size.width,
+                  height: _videoCtrl!.value.size.height,
+                  child: VideoPlayer(_videoCtrl!),
                 ),
-                const SizedBox(height: 50),
-                Image.asset(Images.splashBackgroundOne, width: Get.width, height: Get.height/2, fit: BoxFit.cover)]),
-            ),
-
-            Container(
-              transform: Matrix4.translationValues(0, 20, 0),
-              child: Padding(
-                padding:EdgeInsets.symmetric(horizontal:(70 * double.tryParse(_animation.value.toString())!)),
-                child: Image.asset(Images.splashBackgroundTwo, width: Get.size.width),
-              ),
-            ),
-
-          ]),
-
-        ]),
+              )
+            : const SizedBox.expand(),
       ),
     );
   }
