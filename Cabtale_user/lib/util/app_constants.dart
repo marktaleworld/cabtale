@@ -10,7 +10,7 @@ class AppConstants {
   static const String packageName = 'com.cabtale.customer';
   static const String appVersion = '1.8';
   static const Color lightPrimary = Color.fromARGB(255, 3, 38, 21);
-  static const Color darkPrimary = Color(0xff1BAD84);
+  static const Color darkPrimary = Color.fromARGB(255, 3, 38, 21);
   static const String fontFamily = 'SFProText';
   static const double coverageRadiusInMeter = 50;
   static const String configUri = '/api/customer/configuration';

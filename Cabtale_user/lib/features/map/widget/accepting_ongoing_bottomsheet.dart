@@ -48,19 +48,20 @@ class _AcceptingAndOngoingBottomSheetState extends State<AcceptingAndOngoingBott
 
             const OtpWidget(fromPage: false),
             ],
-          ) :  rideController.remainingDistanceModel.isNotEmpty ?
-          TollTipWidget(title: '${'drop_off'.tr} ${DateConverter.dateToTimeOnly(DateTime.now().add(Duration(seconds: rideController.remainingDistanceModel[0].durationSec ?? 0)))}') : const SizedBox(height: Dimensions.paddingSizeDefault,),
-
+          ) :  
+          rideController.remainingDistanceModel.isNotEmpty ?
+          TollTipWidget(title: '${'drop_off'.tr} ${DateConverter.dateToTimeOnly(DateTime.now().add(Duration(seconds: rideController.remainingDistanceModel[0].durationSec ?? 0)))}') : const SizedBox(height: Dimensions.paddingSizeLarge,),
+          const SizedBox(height: Dimensions.paddingSizeSmall,),
           const EstimatedFareAndDistance(),
 
-          const SizedBox(height: Dimensions.paddingSizeDefault,),
+          const SizedBox(height: Dimensions.paddingSizeLarge,),
           const ActivityScreenRiderDetails(),
 
-          const SizedBox(height: Dimensions.paddingSizeDefault,),
+          const SizedBox(height: Dimensions.paddingSizeLarge,),
 
 
           Padding(padding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
-             child: Text('trip_details'.tr,style: textBold.copyWith(fontSize: Dimensions.fontSizeDefault,color: Theme.of(context).primaryColor),),),
+             child: Text('trip_details'.tr,style: textBold.copyWith(fontSize: Dimensions.fontSizeDefault,color: Get.isDarkMode ? Colors.white : Theme.of(context).primaryColor),),),
 
          if(rideController.tripDetails != null)
             RouteWidget(totalDistance: rideController.estimatedDistance,
@@ -80,12 +81,12 @@ class _AcceptingAndOngoingBottomSheetState extends State<AcceptingAndOngoingBott
                 Row(children: [
                   Image.asset(Images.farePrice,height: 15,width: 15,),
                   const SizedBox(width: Dimensions.paddingSizeSmall,),
-                  Text('fare_fee'.tr,style: textRegular.copyWith(color: Theme.of(context).primaryColor, fontSize: Dimensions.fontSizeDefault)),
+                  Text('fare_fee'.tr,style: textRegular.copyWith(color: Get.isDarkMode ? Colors.white : Theme.of(context).primaryColor, fontSize: Dimensions.fontSizeDefault)),
                ]),
 
                Container(decoration: BoxDecoration(
                    borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                   color:  Theme.of(context).primaryColor.withOpacity(0.2)),
+                   color: Get.isDarkMode ? Colors.white.withOpacity(0.8) : Theme.of(context).primaryColor.withOpacity(0.2)),
                  padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall,vertical: Dimensions.paddingSizeExtraSmall),
                  child: Text(PriceConverter.convertPrice(((rideController.tripDetails?.discountAmount ?? 0) > 0) ?
                  rideController.tripDetails?.discountActualFare ?? 0 :
@@ -100,9 +101,9 @@ class _AcceptingAndOngoingBottomSheetState extends State<AcceptingAndOngoingBott
                    child: Row(children: [
                      Image.asset(Images.paymentTypeIcon,height: 15,width: 15,),
                      const SizedBox(width: Dimensions.paddingSizeSmall,),
-                     Text('payment'.tr,style: textRegular.copyWith(color: Theme.of(context).primaryColor,fontSize: Dimensions.fontSizeDefault),),
+                     Text('payment'.tr,style: textRegular.copyWith(color: Get.isDarkMode ? Colors.white : Theme.of(context).primaryColor,fontSize: Dimensions.fontSizeDefault),),
                    ])),
-               Text(rideController.tripDetails?.paymentMethod?.replaceAll(RegExp('[\\W_]+'),' ').capitalize ?? 'cash'.tr,style: TextStyle(color: Theme.of(context).primaryColor),)
+               Text(rideController.tripDetails?.paymentMethod?.replaceAll(RegExp('[\\W_]+'),' ').capitalize ?? 'cash'.tr,style: TextStyle(color: Get.isDarkMode ? Colors.white : Theme.of(context).primaryColor),)
              ]),
            ],
            ),
@@ -111,34 +112,52 @@ class _AcceptingAndOngoingBottomSheetState extends State<AcceptingAndOngoingBott
          const SizedBox(height: Dimensions.paddingSizeDefault),
          if(rideController.tripDetails != null && rideController.tripDetails!.type == 'ride_request' && !rideController.tripDetails!.isPaused!)
            Center(
-             child: SliderButton(
-               action: (){
-                 currentState = 1;
-                 widget.expandableKey.currentState?.expand();
-                 setState(() {});
-               },
-               label: Text('cancel_ride'.tr,style: TextStyle(color: Theme.of(context).primaryColor),),
-               dismissThresholds: 0.5, dismissible: false, shimmer: false,
-               width: 1170, height: 40, buttonSize: 40, radius: 20,
-               icon: Center(child: Container(
-                 width: 36, height: 36,
-                 decoration: BoxDecoration(
-                     shape: BoxShape.circle,
-                     color: Theme.of(context).cardColor),
-                 child: Center(
-                   child: Icon(
-                     Get.find<LocalizationController>().isLtr ? Icons.arrow_forward_ios_rounded : Icons.keyboard_arrow_left,
-                     color: Colors.grey, size: 20.0,
-                   ),
-                 ),
-               )),
-               isLtr: Get.find<LocalizationController>().isLtr,
-               boxShadow: const BoxShadow(blurRadius: 0),
-               buttonColor: Colors.transparent,
-               backgroundColor: Theme.of(context).primaryColor.withOpacity(0.15),
-               baseColor: Theme.of(context).primaryColor,
-             ),
-           )
+            child: Column(
+              children: [
+                SliderButton(
+                  action: () {
+                    currentState = 1;
+                    widget.expandableKey.currentState?.expand();
+                    setState(() {});
+                  },
+                  label: Text(
+                    'cancel_ride'.tr,
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                  dismissThresholds: 0.5,
+                  dismissible: false,
+                  shimmer: false,
+                  width: MediaQuery.of(context).size.width * 0.9, 
+                  height: 60,   
+                  buttonSize: 50,
+                  radius: 30,
+                  icon: Center(
+                    child: Container(
+                      width: 46,
+                      height: 46,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Color.fromARGB(83, 244, 67, 54), // 🔴 light red circle bg
+                      ),
+                      child: const Center(
+                        child: Icon(
+                          Icons.close, // ❌ cancel icon
+                          color: Colors.red, // 🔴 red icon
+                          size: 22.0,
+                        ),
+                      ),
+                    ),
+                  ),
+                  isLtr: Get.find<LocalizationController>().isLtr,
+                  boxShadow: const BoxShadow(blurRadius: 0),
+                  buttonColor: Colors.transparent,
+                  backgroundColor: Colors.red.withOpacity(0.15), // 🔴 track
+                  baseColor: Colors.red, // 🔴 progress color
+                ),
+              ],
+            ),
+          )
+
        ]) :
          const Column(children: [BannerShimmer(), BannerShimmer(), BannerShimmer()]) :
          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

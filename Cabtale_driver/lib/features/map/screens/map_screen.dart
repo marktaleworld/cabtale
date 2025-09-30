@@ -446,7 +446,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver{
                   return InkWell(onTap: () => Get.to(()=> const RideRequestScreen()),
                     child: Container(
                       decoration: BoxDecoration(color: Theme.of(context).primaryColor,
-                        borderRadius: BorderRadius.circular(Dimensions.paddingSizeExtraLarge),
+                        borderRadius: BorderRadius.circular(Dimensions.paddingSizeSmall),
                       ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(

@@ -62,7 +62,7 @@ class _OtpWidgetState extends State<OtpWidget> {
                         fontSize: Dimensions.fontSizeDefault)),
 
                 TextSpan(text: 'share_the_pin'.tr,
-                    style: textSemiBold.copyWith(color: Theme.of(context).primaryColor, fontSize: Dimensions.fontSizeDefault)),
+                    style: textSemiBold.copyWith(color: Get.isDarkMode ? Colors.white : Theme.of(context).primaryColor, fontSize: Dimensions.fontSizeDefault)),
 
                 TextSpan(text: 'with_the_driver'.tr, style: textRegular.copyWith(
                     color: Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.8),

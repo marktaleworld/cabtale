@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ride_sharing_user_app/features/home/widgets/home_bottom_sheet_widget.dart';
 import 'package:ride_sharing_user_app/features/home/widgets/home_referral_view_widget.dart';
+import 'package:ride_sharing_user_app/features/map/screens/map_screen.dart';
 import 'package:ride_sharing_user_app/features/profile/controllers/profile_controller.dart';
 import 'package:ride_sharing_user_app/features/profile/screens/profile_screen.dart';
 import 'package:ride_sharing_user_app/features/splash/controllers/splash_controller.dart';
@@ -23,6 +24,8 @@ import 'package:ride_sharing_user_app/features/ride/controllers/ride_controller.
 import 'package:ride_sharing_user_app/common_widgets/app_bar_widget.dart';
 import 'package:ride_sharing_user_app/common_widgets/sliver_delegate.dart';
 import 'package:ride_sharing_user_app/common_widgets/zoom_drawer_context_widget.dart';
+import 'package:ride_sharing_user_app/common_widgets/button_widget.dart';
+import 'package:ride_sharing_user_app/util/styles.dart';
 
 
 class HomeMenu extends GetView<ProfileController> {
@@ -120,9 +123,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       profileController.profileInfo?.vehicleStatus != 0  &&
                       profileController.profileInfo?.vehicleStatus != 1
                   )
-                    GetBuilder<RideController>(builder: (rideController) {
-                      return const OngoingRideCardWidget();
-                    }),
+                    if(Get.find<ProfileController>().profileInfo?.vehicle != null)
+                    const MyActivityListViewWidget(),
+                    const SizedBox(height: 27),
+
 
                   if(profileController.profileInfo?.vehicle == null && profileController.profileInfo?.vehicleStatus == 0)
                     const AddYourVehicleWidget(),
@@ -134,9 +138,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       title: 'registration_not_approve_yet_vehicle'.tr,
                     ),
 
-                  if(Get.find<ProfileController>().profileInfo?.vehicle != null)
-                    const MyActivityListViewWidget(),
-                  const SizedBox(height: Dimensions.paddingSizeDefault),
+                 
+                    GetBuilder<RideController>(builder: (rideController) {
+                      return const OngoingRideCardWidget();
+                    }),
 
                   if(Get.find<SplashController>().config?.referralEarningStatus ?? false)
                     const HomeReferralViewWidget(),
@@ -159,85 +164,116 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ]),
 
-          floatingActionButton: GetBuilder<RideController>(
-              builder: (rideController) {
-                int ridingCount = (rideController.ongoingTrip == null || rideController.ongoingTrip!.isEmpty) ? 0 :
-                (
-                    rideController.ongoingTrip![0].currentStatus == 'ongoing' ||
-                        rideController.ongoingTrip![0].currentStatus == 'accepted' ||
-                        (
-                            rideController.ongoingTrip![0].currentStatus =='completed' &&
-                                rideController.ongoingTrip![0].paymentStatus == 'unpaid'
-                        ) ||
-                        (
-                            rideController.ongoingTrip![0].currentStatus =='cancelled' &&
-                                rideController.ongoingTrip![0].paymentStatus == 'unpaid' &&
-                                rideController.ongoingTrip![0].cancelledBy == 'customer'
-                        ) && rideController.ongoingTrip![0].type != 'parcel'
-                ) ? 1 : 0;
-                int parcelCount = rideController.parcelListModel?.totalSize?? 0;
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 90),
-                  child: CustomMenuButtonWidget(
-                    openForegroundColor: Colors.white,
-                    closedBackgroundColor: Theme.of(context).primaryColor,
-                    openBackgroundColor: Theme.of(context).primaryColorDark,
-                    labelsBackgroundColor: Theme.of(context).cardColor,
-                    speedDialChildren: <CustomMenuWidget>[
-                      CustomMenuWidget(
-                        child: const Icon(Icons.directions_run),
-                        foregroundColor: Colors.white,
-                        backgroundColor: Theme.of(context).primaryColor,
-                        label: 'ongoing_ride'.tr,
-                        onPressed: () {
-                          if(
-                          rideController.ongoingTrip![0].currentStatus == 'ongoing' ||
-                              rideController.ongoingTrip![0].currentStatus == 'accepted' ||
-                              (
-                                  rideController.ongoingTrip![0].currentStatus =='completed' &&
-                                      rideController.ongoingTrip![0].paymentStatus == 'unpaid'
-                              ) ||
-                              (
-                                  rideController.ongoingTrip![0].paidFare != "0" &&
-                                      rideController.ongoingTrip![0].paymentStatus == 'unpaid'
-                              )
-                          ){
-                            Get.find<RideController>().getCurrentRideStatus(froDetails: true);
-                          }else{
-                            showCustomSnackBar('no_trip_available'.tr);
-                          }
-                        },
-                        closeSpeedDialOnPressed: false,
-                      ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+floatingActionButton: GetBuilder<RideController>(
+  builder: (rideController) {
+    final hasTrips = rideController.ongoingTrip != null && rideController.ongoingTrip!.isNotEmpty;
 
-                      CustomMenuWidget(
-                        child: Text('${rideController.parcelListModel?.totalSize}'),
-                        foregroundColor: Colors.white,
-                        backgroundColor: Theme.of(context).primaryColor,
-                        label: 'parcel_delivery'.tr,
-                        onPressed: () {
-                          if(
-                          rideController.parcelListModel != null &&
-                              rideController.parcelListModel!.data != null &&
-                              rideController.parcelListModel!.data!.isNotEmpty
-                          ){
-                            Get.to(()=>  const OngoingParcelListViewWidget(title: 'ongoing_parcel_list',));
+    final bool rideActive = hasTrips && (
+      rideController.ongoingTrip![0].currentStatus == 'ongoing' ||
+      rideController.ongoingTrip![0].currentStatus == 'accepted' ||
+      (
+        rideController.ongoingTrip![0].currentStatus == 'completed' &&
+        rideController.ongoingTrip![0].paymentStatus == 'unpaid'
+      ) ||
+      (
+        rideController.ongoingTrip![0].paidFare != "0" &&
+        rideController.ongoingTrip![0].paymentStatus == 'unpaid'
+      )
+    );
 
-                          }else{
-                            showCustomSnackBar('no_parcel_available'.tr);
-                          }
-                        },
-                        closeSpeedDialOnPressed: false,
-                      ),
-                    ],
-                    child: Padding(
-                      padding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
-                      child: Badge(label: Text('${ridingCount + parcelCount}'),child: Image.asset(Images.ongoing)),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 90),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // 🔹 Map View Button
+          InkWell(
+            onTap: () {
+              Get.to(() => const MapScreen());
+            },
+            borderRadius: BorderRadius.circular(12),
+            child: SizedBox(
+              width: 180,  
+              height: 48, 
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(Get.context!).primaryColor,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      Images.map,
+                      height: 24, // ⬅️ bigger icon
+                      width: 24,
                     ),
-                  ),
-                );
+                    const SizedBox(width: 8),
+                    Text(
+                      'Map View',
+                      style: textRegular.copyWith(
+                        color: Colors.white,
+                        fontSize: 16, // ⬅️ bigger text
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+          const SizedBox(width: 24),
+
+          // 🔹 Ongoing Ride Button
+          InkWell(
+            onTap: () {
+              if (rideActive) {
+                Get.find<RideController>().getCurrentRideStatus(froDetails: true);
+              } else {
+                showCustomSnackBar('no_trip_available'.tr);
               }
-          )
+            },
+            borderRadius: BorderRadius.circular(12),
+            child: SizedBox(
+              width: 180,  // ⬅️ wider
+              height: 48,  // ⬅️ taller
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(Get.context!).primaryColor,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      Images.ongoing,
+                      height: 24,
+                      width: 24,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Ongoing Ride',
+                      style: textRegular.copyWith(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  },
+),
+
       ),
     );
   }

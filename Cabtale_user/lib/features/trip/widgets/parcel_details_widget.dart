@@ -33,7 +33,7 @@ class ParcelDetailsWidget extends StatelessWidget {
 
       Padding(padding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text('trip_details'.tr,style: textBold.copyWith(fontSize: Dimensions.fontSizeDefault,color: Theme.of(context).primaryColor),),
+          Text('trip_details'.tr,style: textBold.copyWith(fontSize: Dimensions.fontSizeDefault,color: Get.isDarkMode ? Colors.white : Theme.of(context).primaryColor),),
           const SizedBox(height: Dimensions.paddingSizeSmall,),
 
           TripRouteWidget(pickupAddress: tripDetails.pickupAddress!,
@@ -92,7 +92,7 @@ class ParcelDetailsWidget extends StatelessWidget {
             Row(children: [
               Image.asset(Images.profileMyWallet,height: 15,width: 15,),
               const SizedBox(width: Dimensions.paddingSizeSmall,),
-              Text('payment'.tr,style: textRegular.copyWith(color: Theme.of(context).primaryColor,fontSize: Dimensions.fontSizeSmall))
+              Text('payment'.tr,style: textRegular.copyWith(color: Get.isDarkMode ? Colors.white : Theme.of(context).primaryColor,fontSize: Dimensions.fontSizeSmall))
             ]),
 
             Padding(

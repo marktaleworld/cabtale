@@ -45,7 +45,7 @@ class TripFareSummery extends StatelessWidget {
                     const SizedBox(width: Dimensions.paddingSizeSmall),
 
                     Text('fare_fee'.tr, style: textRegular.copyWith(
-                      color: Theme.of(context).primaryColor, fontSize: Dimensions.fontSizeDefault,
+                      color: Get.isDarkMode ? Colors.white.withOpacity(0.9) : Theme.of(context).primaryColor, fontSize: Dimensions.fontSizeDefault,
                     )),
                   ]),
 
@@ -64,7 +64,8 @@ class TripFareSummery extends StatelessWidget {
                         discountAmount != null && discountAmount !.toDouble() > 0 ? discountFare! : tripFare!)}',
                       style: textBold.copyWith(
                         fontSize: Dimensions.fontSizeSmall,
-                        color: Theme.of(context).primaryColor,
+                        //color: Theme.of(context).primaryColor,
+                        color: Get.isDarkMode ? Colors.white.withOpacity(0.9) : Theme.of(context).primaryColor,
                       ),
                     ),
                   ])
@@ -198,7 +199,7 @@ class TripFareSummery extends StatelessWidget {
                       const SizedBox(width: Dimensions.paddingSizeSmall),
 
                       Text('payment'.tr, style: textRegular.copyWith(
-                        color: Theme.of(context).primaryColor, fontSize: Dimensions.fontSizeDefault,
+                        color: Get.isDarkMode ? Colors.white.withOpacity(0.9) : Theme.of(context).primaryColor, fontSize: Dimensions.fontSizeDefault,
                       )),
                     ])),
                     SizedBox(

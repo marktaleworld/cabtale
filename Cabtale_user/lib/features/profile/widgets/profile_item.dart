@@ -15,7 +15,7 @@ class ProfileMenuItem extends StatelessWidget {
 
       SizedBox( child: ListTile(
 
-        leading: Image.asset(icon,width: 20,height: 20,fit: BoxFit.cover,color: Theme.of(context).primaryColor),
+        leading: Image.asset(icon,width: 20,height: 20,fit: BoxFit.cover,color: Get.isDarkMode ? Colors.white : Theme.of(context).primaryColor),
         title: Text(title.tr, style: textMedium.copyWith(color: Theme.of(context).textTheme.bodyLarge!.color!.withOpacity(0.9))),
         onTap: onTap,
       )),

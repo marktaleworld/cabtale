@@ -113,7 +113,7 @@ class _PaymentScreenState extends State<PaymentScreen> with WidgetsBindingObserv
                       ),
                         child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [
                           Text('payment'.tr,
-                            style: textSemiBold.copyWith(color: Theme.of(context).primaryColor),
+                            style: textSemiBold.copyWith(color: Get.isDarkMode ? Colors.white : Theme.of(context).primaryColor),
                           ),
 
                           Container(
@@ -122,12 +122,12 @@ class _PaymentScreenState extends State<PaymentScreen> with WidgetsBindingObserv
                               vertical: Dimensions.paddingSizeThree,
                             ),
                             decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColor.withOpacity(.2),
+                              color: Get.isDarkMode ? Colors.white.withOpacity(.2) : Theme.of(context).primaryColor.withOpacity(.2),
                               borderRadius: BorderRadius.circular(Dimensions.paddingSizeExtraSmall),
                             ),
                             child: Row(children: [
                               Text(paymentController.paymentType.tr,
-                                style: textMedium.copyWith(color: Theme.of(context).primaryColor),
+                                style: textMedium.copyWith(color: Get.isDarkMode ? Colors.white : Theme.of(context).primaryColor),
                               ),
 
                               const SizedBox(width: Dimensions.paddingSizeExtraSmall),
@@ -145,7 +145,7 @@ class _PaymentScreenState extends State<PaymentScreen> with WidgetsBindingObserv
                         const SizedBox(width: Dimensions.paddingSizeExtraSmall),
                         if(rideController.finalFare != null && rideController.finalFare!.currentStatus != null)
                           Text(rideController.finalFare!.currentStatus!.capitalize!,
-                            style: textSemiBold.copyWith(color: Theme.of(context).primaryColor),
+                            style: textSemiBold.copyWith(color: Get.isDarkMode ? Colors.white : Theme.of(context).primaryColor),
                           ),
                       ]),
 
@@ -182,7 +182,7 @@ class _PaymentScreenState extends State<PaymentScreen> with WidgetsBindingObserv
 
                         const SizedBox(width: Dimensions.paddingSizeExtraSmall),
                         Text('total_fare'.tr, style: textSemiBold.copyWith(
-                          color: Theme.of(context).primaryColor,
+                          color: Get.isDarkMode ? Colors.white : Theme.of(context).primaryColor,
                         )),
 
                         const SizedBox(width: Dimensions.paddingSizeExtraSmall),

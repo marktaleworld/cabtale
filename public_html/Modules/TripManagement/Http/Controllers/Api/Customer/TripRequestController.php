@@ -197,6 +197,17 @@ class TripRequestController extends Controller
         if ($get_routes[1]['status'] !== "OK") {
             return response()->json(responseFormatter(ROUTE_NOT_FOUND_404, $get_routes[1]['error_detail']), 403);
         }
+
+        $distanceInKm = $get_routes[0]['distance'];
+
+        // 🚨 Enforce minimum distance = 50 km
+        if ($distanceInKm < 50) {
+            return response()->json(responseFormatter([
+                'response_code' => 'MINIMUM_DISTANCE_403',
+                'message'       => 'Minimum destination distance should be 50 km',
+            ]), 403);
+        }
+
         $estimated_fare = $this->estimatedFare(
             tripRequest: $request->all(),
             routes: $get_routes,
@@ -225,7 +236,7 @@ class TripRequestController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function createRideRequest(Request $request): JsonResponse
+   // public function createRideRequest(Request $request): JsonResponse
     // {
     //     // \Log::info($request->getContent());
     //     $trip = $this->getResumeRide();
@@ -427,8 +438,8 @@ class TripRequestController extends Controller
 
     //     return response()->json(responseFormatter(TRIP_REQUEST_STORE_200, $trip));
     // }
-
-     {
+    public function createRideRequest(Request $request): JsonResponse
+    {
         $trip = $this->getResumeRide();
         if ($request->type == "ride_request" && $trip && $request->trip_request_id == null) {
             return response()->json(responseFormatter(INCOMPLETE_RIDE_403), 403);

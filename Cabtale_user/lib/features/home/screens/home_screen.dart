@@ -145,14 +145,22 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: Column(children: [
                                   const SizedBox(height: 10),
                                   const HomeSearchWidget(),
+                                  const Padding(
+                                padding: EdgeInsets.only(
+                                  top:Dimensions.paddingSize,left: Dimensions.paddingSize,
+                                  right: Dimensions.paddingSize,
+                                ),
+                                child: HomeMapView(title: 'rider_around_you'),
+                              ),
+                                  //const SizedBox(height: 20),
                                   
-                                  const SizedBox(height: 20),
-                                  const BannerView(),
-                                  const SizedBox(height: 10),
                                   const Padding(
                                     padding: EdgeInsets.only(top: Dimensions.paddingSize),
                                       child: CategoryView(),
                                   ),
+                                  const SizedBox(height: 20),
+                                   const BannerView(),
+                                 
                                   if((Get.find<ConfigController>().config?.externalSystem ?? false) && Get.find<AuthController>().isLoggedIn())...[
                                     const VisitToMartWidget(),
                                     const SizedBox(height: Dimensions.paddingSizeDefault)
@@ -162,13 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               //const SizedBox(height:Dimensions.paddingSizeDefault),
                               //const HomeMyAddress(addressPage: AddressPage.home),
 
-                              const Padding(
-                                padding: EdgeInsets.only(
-                                  top:Dimensions.paddingSize,left: Dimensions.paddingSize,
-                                  right: Dimensions.paddingSize,
-                                ),
-                                child: HomeMapView(title: 'rider_around_you'),
-                              ),
+                              
 
                               if(Get.find<ConfigController>().config?.referralEarningStatus ?? false)
                               const HomeReferralViewWidget(),

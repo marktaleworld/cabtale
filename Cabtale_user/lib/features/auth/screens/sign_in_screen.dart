@@ -149,7 +149,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         Text(
                           '${AppConstants.appName} Your Ride, Your Story.',
                           style: textBold.copyWith(
-                            color: Theme.of(context).primaryColor,
+                            color: Get.isDarkMode ? Colors.white : Theme.of(context).primaryColor,
                             fontSize: Dimensions.fontSizeLarge,
                           ),
                         ),
@@ -164,7 +164,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         'log_in'.tr,
                         textAlign: TextAlign.center,
                         style: textBold.copyWith(
-                          color: Theme.of(context).primaryColor,
+                          color: Get.isDarkMode ? Colors.white : Theme.of(context).primaryColor,
                           fontSize: Dimensions.fontSizeOverLarge,
                         ),
                       ),
@@ -371,7 +371,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               "terms_and_condition".tr,
                               style: textMedium.copyWith(
                                 decoration: TextDecoration.underline,
-                                color: Theme.of(context).primaryColor,
+                                color: Get.isDarkMode ? Colors.white : Theme.of(context).primaryColor,
                                 fontSize: Dimensions.fontSizeSmall,
                               ),
                             ),

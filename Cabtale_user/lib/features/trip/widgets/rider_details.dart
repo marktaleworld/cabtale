@@ -34,15 +34,15 @@ class ActivityScreenRiderDetails extends StatelessWidget {
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                         rideController.tripDetails?.driver != null ? SizedBox(width: 100,
                           child: Text('${rideController.tripDetails!.driver!.firstName!} ${rideController.tripDetails!.driver!.lastName!}',
-                            style: textMedium.copyWith(fontSize: Dimensions.fontSizeLarge,color: Theme.of(context).primaryColorDark),
+                            style: textMedium.copyWith(fontSize: Dimensions.fontSizeLarge,color: Get.isDarkMode ? Colors.white : Theme.of(context).primaryColorDark),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ) : const SizedBox(),
                         Text.rich(TextSpan(style: textRegular.copyWith(
                             fontSize: Dimensions.fontSizeLarge,
-                            color: Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.8),), children:  [
+                            color: Get.isDarkMode ? Colors.white : Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.8),), children:  [
 
-                            WidgetSpan(child: Icon(Icons.star,color: Theme.of(context).colorScheme.primaryContainer,size: 15,),
+                            WidgetSpan(child: Icon(Icons.star,color:Get.isDarkMode ? Colors.white : Theme.of(context).colorScheme.primaryContainer,size: 15,),
                               alignment: PlaceholderAlignment.middle),
 
                             TextSpan(text: ratting,
@@ -65,7 +65,7 @@ class ActivityScreenRiderDetails extends StatelessWidget {
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
 
                   Text(rideController.tripDetails!.vehicle != null ? rideController.tripDetails!.vehicle!.model!.name! : '',
-                    style: textMedium.copyWith(fontSize: Dimensions.fontSizeDefault,color: Theme.of(context).primaryColorDark),
+                    style: textMedium.copyWith(fontSize: Dimensions.fontSizeDefault,color: Get.isDarkMode ? Colors.white : Theme.of(context).primaryColorDark),
                     overflow: TextOverflow.ellipsis,),
 
                   Text.rich(TextSpan(style: textRegular.copyWith(fontSize: Dimensions.fontSizeLarge,

@@ -36,37 +36,52 @@ class _HelpAndSupportScreenState extends State<HelpAndSupportScreen> {
       body:GetBuilder<HelpSupportController>(builder: (supportController){
         return Stack(children: [
           BodyWidget(
-              appBar: AppBarWidget(title: 'do_you_need_help'.tr,centerTitle: true,showBackButton: true),
-              body: Column(children: [
-                const SizedBox(height: Dimensions.paddingSizeSignUp),
+            appBar: AppBarWidget(
+              title: 'do_you_need_help'.tr,
+              centerTitle: true,
+              showBackButton: true,
+            ),
+            body: Column(
+              children: [
+                const SizedBox(height: Dimensions.paddingSizeDefault),
+
+                // 🔻 Tabs go here instead of Positioned at top
+                SizedBox(
+                  height: 50,
+                  width: Get.width - Dimensions.paddingSizeDefault,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    padding: EdgeInsets.zero,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: supportController.helpAndSupportTabs.length,
+                    itemBuilder: (context, index) {
+                      return SizedBox(
+                        width: Get.width / 2.1,
+                        child: HelpSupportTypeButtonWidget(
+                          profileTypeName: supportController.helpAndSupportTabs[index],
+                          index: index,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+
+                const SizedBox(height: Dimensions.paddingSizeDefault),
 
                 Expanded(
-                    child: supportController.currentTabIndex == 0 ?
-                    const ContactUsView() :
-                    SingleChildScrollView(
-                      padding: const EdgeInsets.all(Dimensions.paddingSizeSmall).copyWith(top: Dimensions.paddingSizeExtraLarge),
-                      physics: const BouncingScrollPhysics(),
-                      child: HtmlWidget(data, key: const Key('terms_and_condition')),
-                    )
+                  child: supportController.currentTabIndex == 0
+                      ? const ContactUsView()
+                      : SingleChildScrollView(
+                          padding: const EdgeInsets.all(Dimensions.paddingSizeSmall)
+                              .copyWith(top: Dimensions.paddingSizeExtraLarge),
+                          physics: const BouncingScrollPhysics(),
+                          child: HtmlWidget(
+                            data,
+                            key: const Key('terms_and_condition'),
+                          ),
+                        ),
                 ),
-              ]),
-          ),
-
-          Positioned( top: Dimensions.topSpace,left: Dimensions.paddingSizeSmall,
-            child: SizedBox(height: Get.find<LocalizationController>().isLtr? 45 : 50,
-              width: Get.width-Dimensions.paddingSizeDefault,
-              child: ListView.builder(
-                shrinkWrap: true,
-                padding: EdgeInsets.zero,
-                scrollDirection: Axis.horizontal,
-                itemCount: supportController.helpAndSupportTabs.length,
-                itemBuilder: (context, index){
-                  return SizedBox(width: Get.width/2.1, child: HelpSupportTypeButtonWidget(
-                    profileTypeName : supportController.helpAndSupportTabs[index], index: index,
-                  ));
-
-                },
-              ),
+              ],
             ),
           ),
         ]);

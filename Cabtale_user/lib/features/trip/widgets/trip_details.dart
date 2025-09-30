@@ -87,7 +87,7 @@ class TripDetailWidget extends StatelessWidget {
             Row(children: [
               Image.asset(Images.profileMyWallet,height: 15,width: 15,),
               const SizedBox(width: Dimensions.paddingSizeSmall,),
-              Text('payment'.tr,style: textRegular.copyWith(color: Theme.of(context).primaryColor,fontSize: Dimensions.fontSizeSmall))]),
+              Text('payment'.tr,style: textRegular.copyWith(color: Get.isDarkMode ? Colors.white : Theme.of(context).primaryColor,fontSize: Dimensions.fontSizeSmall))]),
 
 
             Padding(padding: const EdgeInsets.symmetric(horizontal: 10),

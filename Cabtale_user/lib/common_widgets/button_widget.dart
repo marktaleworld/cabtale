@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:ride_sharing_user_app/util/dimensions.dart';
 import 'package:ride_sharing_user_app/util/styles.dart';
 
@@ -34,32 +35,81 @@ class ButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // final ButtonStyle flatButtonStyle = TextButton.styleFrom(
+    //   backgroundColor:backgroundColor ?? (onPressed == null ? Theme.of(context).disabledColor : transparent ?
+    //   Colors.transparent : Theme.of(context).primaryColor),
+    //   minimumSize: Size(width, height),
+    //   padding: EdgeInsets.zero,
+    //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius),
+    //       side: showBorder?BorderSide(color: borderColor ?? Theme.of(context).primaryColor,width: borderWidth):
+    //       const BorderSide(color: Colors.transparent)));
+
     final ButtonStyle flatButtonStyle = TextButton.styleFrom(
-      backgroundColor:backgroundColor ?? (onPressed == null ? Theme.of(context).disabledColor : transparent ?
-      Colors.transparent : Theme.of(context).primaryColor),
+      backgroundColor: backgroundColor ??
+          (onPressed == null
+              ? Theme.of(context).disabledColor
+              : transparent
+                  ? Colors.transparent
+                  : Theme.of(context).primaryColor),
       minimumSize: Size(width, height),
       padding: EdgeInsets.zero,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius),
-          side: showBorder?BorderSide(color: borderColor ?? Theme.of(context).primaryColor,width: borderWidth):
-          const BorderSide(color: Colors.transparent)));
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(radius),
+        side: showBorder
+            ? BorderSide(
+                color: borderColor ??
+                    (transparent ? Colors.white : Theme.of(context).primaryColor),
+                width: borderWidth,
+              )
+            : const BorderSide(color: Colors.transparent),
+      ),
+    );
 
 
     return Center(child: SizedBox(width: width, child: Padding(padding: margin,
       child: TextButton(onPressed: onPressed, style: flatButtonStyle,
-        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        // child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
 
-          icon != null ? Padding(padding: const EdgeInsets.only(right: Dimensions.paddingSizeExtraSmall),
-            child: Icon(icon, color: transparent ? Theme.of(context).primaryColor : Colors.white)) : const SizedBox(),
+        //   icon != null ? Padding(padding: const EdgeInsets.only(right: Dimensions.paddingSizeExtraSmall),
+        //     child: Icon(icon, color: transparent ? Theme.of(context).primaryColor : Colors.white)) : const SizedBox(),
 
 
-          Text(buttonText, textAlign: TextAlign.center, style: boldText? textBold.copyWith(
-            color: textColor ?? (transparent ? Theme.of(context).primaryColor : Colors.white),
-            fontSize: fontSize ?? Dimensions.fontSizeDefault,
-          ):
+        //   Text(buttonText, textAlign: TextAlign.center, style: boldText? textBold.copyWith(
+        //     color: textColor ?? (transparent ? Theme.of(context).primaryColor : Colors.white),
+        //     fontSize: fontSize ?? Dimensions.fontSizeDefault,
+        //   ):
 
-          textRegular.copyWith(color: textColor ?? (transparent ? Theme.of(context).primaryColor : Colors.white),
-            fontSize: fontSize ?? Dimensions.fontSizeLarge)),
-        ]),
+        //   textRegular.copyWith(color: textColor ?? (transparent ? Theme.of(context).primaryColor : Colors.white),
+        //     fontSize: fontSize ?? Dimensions.fontSizeLarge)),
+        // ]),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (icon != null)
+              Padding(
+                padding: const EdgeInsets.only(right: Dimensions.paddingSizeExtraSmall),
+                child: Icon(
+                  icon,
+                  color: transparent ? Colors.white : Colors.white,
+                ),
+              ),
+
+            Text(
+              buttonText,
+              textAlign: TextAlign.center,
+              style: boldText
+                  ? textBold.copyWith(
+                      color: textColor ?? (transparent ? Colors.white : Colors.white),
+                      fontSize: fontSize ?? Dimensions.fontSizeDefault,
+                    )
+                  : textRegular.copyWith(
+                      color: textColor ?? (transparent ? Colors.white : Colors.white),
+                      fontSize: fontSize ?? Dimensions.fontSizeLarge,
+                    ),
+            ),
+          ],
+        ),
+
       ),
     )));
   }

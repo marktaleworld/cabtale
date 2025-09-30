@@ -38,8 +38,10 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
       body: GetBuilder<LeaderBoardController>(builder: (leaderboardController) {
         return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           AppBarWidget(title: 'leader_board'.tr, showBackButton: true,),
+        
+        const SizedBox(height: 60),
 
-          const TodayLeaderBoardStatusWidget(),
+         const TodayLeaderBoardStatusWidget(),
 
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault),

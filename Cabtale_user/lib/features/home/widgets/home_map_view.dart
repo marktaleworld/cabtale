@@ -49,15 +49,15 @@ class HomeMapViewState extends State<HomeMapView> {
         Padding(
           padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeDefault),
           child: Column(children: [
-            Center( 
-              child: CustomTitle(
-                title: widget.title.tr,
-                color: Get.isDarkMode
-                    ? Theme.of(context).textTheme.bodyLarge!.color!.withOpacity(0.9)
-                    : Theme.of(context).textTheme.bodyLarge!.color,
-                fontSize: Dimensions.fontSizeDefault,
-              ),
-            ),
+            // Center( 
+            //   child: CustomTitle(
+            //     title: widget.title.tr,
+            //     color: Get.isDarkMode
+            //         ? Theme.of(context).textTheme.bodyLarge!.color!.withOpacity(0.9)
+            //         : Theme.of(context).textTheme.bodyLarge!.color,
+            //     fontSize: Dimensions.fontSizeDefault,
+            //   ),
+            // ),
             const SizedBox(height:Dimensions.paddingSizeSmall),
 
             Container(height: Get.height * 0.25,

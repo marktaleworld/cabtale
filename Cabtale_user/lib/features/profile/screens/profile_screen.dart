@@ -133,9 +133,9 @@ class ProfileScreen extends StatelessWidget {
                 onTap: () => Get.to(() => const EditProfileScreen()),
               ),
 
-              ProfileMenuItem(title: 'my_address', icon: Images.location,
-                onTap: () => Get.to(() => const MyAddressScreen()),
-              ),
+              // ProfileMenuItem(title: 'my_address', icon: Images.location,
+              //   onTap: () => Get.to(() => const MyAddressScreen()),
+              // ),
 
               ProfileMenuItem(title: 'message', icon: Images.profileMessage,
                 onTap: () => Get.to(() => const MessageListScreen()),
@@ -237,7 +237,7 @@ class ProfileScreen extends StatelessWidget {
 
   Column _buildColumnItem(String title,String value,BuildContext context) {
     return Column(children: [
-      Text(value,style: textBold.copyWith(color: Theme.of(context).primaryColor,
+      Text(value,style: textBold.copyWith(color: Get.isDarkMode ?Colors.white : Colors.black,
         fontSize: Dimensions.fontSizeExtraLarge,
       )),
 

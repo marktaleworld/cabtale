@@ -27,14 +27,14 @@ class ContactUsView extends StatelessWidget {
             message: "typically_the_support_team_send_you_any_feedback",
             data: Get.find<ConfigController>().config!.businessContactEmail!,
           ),
-          // const SizedBox(height: Dimensions.paddingSizeSignUp),
+          const SizedBox(height: Dimensions.paddingSizeSignUp),
 
-          // ContactWithWidget(
-          //   title: 'contact_us_through_phone',
-          //   subTitle: 'contact_us_through_our_customer_care_number',
-          //   message: "talk_with_our_customer",
-          //   data: Get.find<ConfigController>().config!.businessContactPhone!,
-          // ),
+          ContactWithWidget(
+            title: 'contact_us_through_phone',
+            subTitle: 'contact_us_through_our_customer_care_number',
+            message: "talk_with_our_customer",
+            data: Get.find<ConfigController>().config!.businessContactPhone!,
+          ),
 
         ]),
         const SizedBox(height: Dimensions.paddingSizeExtraLarge),
@@ -52,19 +52,19 @@ class ContactUsView extends StatelessWidget {
               );
             },
           ),
-          // SizedBox(width: MediaQuery.of(context).size.width / 20),
-          // ButtonWidget(
-          //   width: Get.width/2.65,
-          //   radius: Dimensions.radiusExtraLarge,
-          //   buttonText: 'call'.tr,
-          //   icon: Icons.call,
-          //   onPressed: () async {
-          //     await launchUrl(
-          //       Uri(scheme: 'tel', path: Get.find<ConfigController>().config!.businessContactPhone!),
-          //       mode: LaunchMode.externalApplication,
-          //     );
-          //   },
-          // ),
+          SizedBox(width: MediaQuery.of(context).size.width / 20),
+          ButtonWidget(
+            width: Get.width/2.65,
+            radius: Dimensions.radiusExtraLarge,
+            buttonText: 'call'.tr,
+            icon: Icons.call,
+            onPressed: () async {
+              await launchUrl(
+                Uri(scheme: 'tel', path: Get.find<ConfigController>().config!.businessContactPhone!),
+                mode: LaunchMode.externalApplication,
+              );
+            },
+          ),
         ]),
 
       ]),

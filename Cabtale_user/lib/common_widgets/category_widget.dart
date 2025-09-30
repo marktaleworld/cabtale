@@ -21,47 +21,61 @@ class CategoryWidget extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Get.find<RideController>().setRideCategoryIndex(index);
-        if(!fromSelect) {
-          Get.to(() => const SetDestinationScreen());
-        }
-      },
-      child: SizedBox(child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        Container(height: isSelected != null ? 80 : 95, width: isSelected != null ? 80 : 100,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-            color:  (isSelected != null && isSelected!) ? Theme.of(context).primaryColor.withOpacity(0.8)
-                : Theme.of(context).hintColor.withOpacity(0.1),
-          ),
-          padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
-          margin: const EdgeInsets.only(right: Dimensions.paddingSizeSmall),
-          child: Stack(children: [
-            ClipRRect(
+  @override
+Widget build(BuildContext context) {
+  return InkWell(
+    onTap: () {
+      Get.find<RideController>().setRideCategoryIndex(index);
+      if (!fromSelect) {
+        Get.to(() => const SetDestinationScreen());
+      }
+    },
+    child: SizedBox(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            height: isSelected != null ? 80 : 70,
+            width: isSelected != null ? 80 : 70,
+            decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-              child: category.id == '0' ?
-              Image.asset(category.image??'') :
-              ImageWidget(
-                image: '${Get.find<ConfigController>().config?.imageBaseUrl?.vehicleCategory}/${category.image}',
-                height: Get.height,
-              ),
+              color: (isSelected != null && isSelected!)
+                  ? Theme.of(context).primaryColor.withOpacity(0.8)
+                  : Theme.of(context).hintColor.withOpacity(0.1),
             ),
+            padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
+            margin: const EdgeInsets.only(right: Dimensions.paddingSizeSmall),
+            child: Stack(children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+                child: category.id == '0'
+                    ? Image.asset(category.image ?? '')
+                    : ImageWidget(
+                        image:
+                            '${Get.find<ConfigController>().config?.imageBaseUrl?.vehicleCategory}/${category.image}',
+                        height: Get.height,
+                      ),
+              ),
+            ]),
+          ),
+          const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+          Text(
+            category.name ?? '',
+            style: textSemiBold.copyWith(
+              color: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.color
+                  ?.withOpacity(0.8),
+              fontSize: Dimensions.fontSizeSmall,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
+    ),
+  );
+}
 
-            // Image.asset(Images.offerIcon,height: 16,width: 16)
-          ]),
-        ),
-        const SizedBox(height: Dimensions.paddingSizeExtraSmall),
-
-        Text(
-          category.name??'',
-          style: textSemiBold.copyWith(
-            color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.8),
-            fontSize: Dimensions.fontSizeSmall,
-          ), maxLines: 1, overflow: TextOverflow.ellipsis,
-        ),
-      ])),
-    );
-  }
 }

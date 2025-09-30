@@ -33,67 +33,66 @@ class _MyOfferWidgetState extends State<MyOfferWidget> {
               const SizedBox(height: Dimensions.paddingSizeDefault),
 
               Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Theme.of(context).primaryColor.withOpacity(0.25)),
-                  borderRadius: const  BorderRadius.all(Radius.circular(Dimensions.paddingSizeDefault)),
-                ),
-                child: Row(mainAxisSize: MainAxisSize.min, children: [
-                  InkWell(
-                    onTap: (){
-                      widget.isCoupon = false;
-                      setState(() {});
-                    },
-
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: widget.isCoupon ?
-                        null : Theme.of(context).primaryColor,
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: Dimensions.paddingSizeExtraSmall,
-                          horizontal: Dimensions.paddingSizeSmall,
-                        ),
-                        child: Text(
-                          'discounts'.tr,
-                          style: textRegular.copyWith(color: widget.isCoupon ?
-                          Theme.of(context).textTheme.bodyMedium!.color?.withOpacity(0.65) :
-                          Theme.of(context).textTheme.bodyMedium!.color
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  InkWell(
-                    onTap: () {
-                      widget.isCoupon = true;
-                      setState(() {});
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: widget.isCoupon ? Theme.of(context).primaryColor : null,
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: Dimensions.paddingSizeExtraSmall,
-                          horizontal: Dimensions.paddingSizeSmall,
-                        ),
-                        child: Text(
-                          'coupons'.tr,
-                          style: textRegular.copyWith(
-                            color: !widget.isCoupon ?
-                            Theme.of(context).textTheme.bodyMedium!.color?.withOpacity(0.65) :
-                            Theme.of(context).textTheme.bodyMedium!.color,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ]),
+  decoration: BoxDecoration(
+    border: Border.all(color: Theme.of(context).primaryColor.withOpacity(0.25)),
+    borderRadius: const BorderRadius.all(Radius.circular(Dimensions.paddingSizeDefault)),
+  ),
+  child: Row(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      InkWell(
+        onTap: () {
+          widget.isCoupon = false;
+          setState(() {});
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: widget.isCoupon ? null : Theme.of(context).primaryColor,
+            borderRadius: BorderRadius.circular(50),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: Dimensions.paddingSizeExtraSmall,
+              horizontal: Dimensions.paddingSizeSmall,
+            ),
+            child: Text(
+              'discounts'.tr,
+              style: textRegular.copyWith(
+                color: widget.isCoupon ? Colors.black : Colors.white, // ✅ fixed
               ),
+            ),
+          ),
+        ),
+      ),
+
+      InkWell(
+        onTap: () {
+          widget.isCoupon = true;
+          setState(() {});
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: widget.isCoupon ? Theme.of(context).primaryColor : null,
+            borderRadius: BorderRadius.circular(50),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: Dimensions.paddingSizeExtraSmall,
+              horizontal: Dimensions.paddingSizeSmall,
+            ),
+            child: Text(
+              'coupons'.tr,
+              style: textRegular.copyWith(
+                color: widget.isCoupon ? Colors.white : Colors.black, // ✅ fixed
+              ),
+            ),
+          ),
+        ),
+      ),
+    ],
+  ),
+),
+
 
               Expanded(child: SingleChildScrollView(controller: scrollController,
                 child: Column(children: [

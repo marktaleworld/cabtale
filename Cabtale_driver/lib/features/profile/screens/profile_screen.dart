@@ -46,7 +46,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             AppBarWidget(title: 'profile'.tr, showBackButton: true,
               onTap: () => Get.find<ProfileController>().toggleDrawer(),
             ),
-            const SizedBox(height: Dimensions.paddingSizeExtraLarge),
+            const SizedBox(height: 70),
 
             Expanded(child: Padding(
               padding: const EdgeInsets.fromLTRB(
@@ -479,7 +479,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ))
           ]),
 
-          Positioned( top: Dimensions.topSpace,left: Dimensions.paddingSizeSmall,
+          Positioned( top: 110,left: Dimensions.paddingSizeSmall,
             child: SizedBox(height: Get.find<LocalizationController>().isLtr? 45 : 50,
               width: Get.width-Dimensions.paddingSizeDefault,
               child: Center(

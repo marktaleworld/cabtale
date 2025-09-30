@@ -68,6 +68,7 @@ dependencies:
   share_plus: ^10.0.0
   flutter_keyboard_visibility: ^6.0.0
   gauge_indicator: ^0.4.3
+  video_player: ^2.10.0
 
 dependency_overrides:
   flutter_inappwebview_ios:
@@ -99,6 +100,7 @@ flutter:
     - assets/svg/
     - assets/map/
     - assets/
+    - assets/animation/
 
   fonts:
     - family: SFProText

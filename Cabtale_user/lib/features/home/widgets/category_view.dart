@@ -30,8 +30,24 @@ class CategoryView extends StatelessWidget {
         return const SizedBox(height: 105);
       }
 
-      const itemWidth = 90.0; 
-      const spacing = 13.0;
+      Map<String, int> order = {
+        'HatchBack': 1,
+        'Sedan': 2,
+        'SUV(7 Seater)': 3,
+        'RideSafe(CCTV+Wifi)': 4,
+      };
+
+      final sortedList = list
+          .where((c) => order.containsKey(c.name)) 
+          .toList()
+        ..sort((a, b) {
+          int aOrder = order[a.name] ?? 999;
+          int bOrder = order[b.name] ?? 999;
+          return aOrder.compareTo(bOrder);
+        });
+
+      const itemWidth = 90.0;
+      const spacing = 19.0;
 
       return SizedBox(
         height: 105,
@@ -39,15 +55,15 @@ class CategoryView extends StatelessWidget {
         child: LayoutBuilder(
           builder: (context, constraints) {
             final totalWidth =
-                list.length * itemWidth + (list.length - 1) * spacing;
+                sortedList.length * itemWidth + (sortedList.length - 1) * spacing;
 
             if (totalWidth <= constraints.maxWidth) {
               return Center(
                 child: Wrap(
                   spacing: spacing,
                   children: List.generate(
-                    list.length,
-                    (i) => CategoryWidget(index: i, category: list[i]),
+                    sortedList.length,
+                    (i) => CategoryWidget(index: i, category: sortedList[i]),
                   ),
                 ),
               );
@@ -57,10 +73,10 @@ class CategoryView extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               scrollDirection: Axis.horizontal,
               physics: const ClampingScrollPhysics(),
-              itemCount: list.length,
+              itemCount: sortedList.length,
               separatorBuilder: (_, __) => const SizedBox(width: spacing),
               itemBuilder: (context, i) =>
-                  CategoryWidget(index: i, category: list[i]),
+                  CategoryWidget(index: i, category: sortedList[i]),
             );
           },
         ),
@@ -68,3 +84,4 @@ class CategoryView extends StatelessWidget {
     });
   }
 }
+

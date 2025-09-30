@@ -28,7 +28,7 @@ class _PayableHistoryScreenState extends State<PayableHistoryScreen> {
        return Stack(children: [
            Column(children: [
              AppBarWidget(title: 'my_wallet'.tr),
-             const SizedBox(height: Dimensions.topBelowSpace),
+             const SizedBox(height: 70),
 
              Expanded(
                child: SingleChildScrollView( controller: scrollController,
@@ -40,7 +40,7 @@ class _PayableHistoryScreenState extends State<PayableHistoryScreen> {
              )
            ]),
 
-         Positioned(top: Dimensions.topSpace,left: Dimensions.paddingSizeSmall,
+         Positioned(top: 110,left: Dimensions.paddingSizeSmall,
            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
              SizedBox(height: Dimensions.headerCardHeight,
                child: ListView.builder(

@@ -46,7 +46,7 @@ class _FindingRiderWidgetState extends State<FindingRiderWidget> {
               title: rideController.selectedCategory == RideType.parcel ?
               'deliveryman' : 'rider_finding',
             ),
-            const SizedBox(height: Dimensions.paddingSizeSmall),
+            const SizedBox(height: Dimensions.paddingSizeDefault),
 
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               SizedBox(width: MediaQuery.of(context).size.width *0.27,
@@ -142,34 +142,60 @@ class _FindingRiderWidgetState extends State<FindingRiderWidget> {
               const SizedBox(height: Dimensions.paddingSizeDefault),
 
             !(rideController.stateCount  == 3 && widget.fromPage == FindingRide.ride) ?
-            Center(child: SliderButton(
-                action: (){
-                  isSearching = false;
-                  widget.expandableKey.currentState?.expand();
-                  setState(() {});
-                },
-                label: Text(
-                  'cancel_searching'.tr,style: TextStyle(color: Theme.of(context).primaryColor),
+           Center(
+  child: Column(
+    children: [
+      Padding(
+        padding: const EdgeInsets.only(bottom: 16),
+        child: SliderButton(
+          action: () {
+            isSearching = false;
+            widget.expandableKey.currentState?.expand();
+            setState(() {});
+          },
+          label: Text(
+            'cancel_searching'.tr,
+            style: const TextStyle(color: Colors.red), // 🔴 text red
+          ),
+          dismissThresholds: 0.5,
+          dismissible: false,
+          shimmer: false,
+          width: MediaQuery.of(context).size.width * 0.9,
+          height: 60,
+          buttonSize: 50,
+          radius: 30,
+          icon: Center(
+            child: Container(
+              width: 46,
+              height: 46,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Color.fromARGB(83, 244, 67, 54), // 🔴 light red circle
+              ),
+              child: Center(
+                child: Icon(
+                  Get.find<LocalizationController>().isLtr
+                      ? Icons.arrow_forward_ios_rounded
+                      : Icons.keyboard_arrow_left,
+                  color: Colors.red, // 🔴 red icon
+                  size: 20.0,
                 ),
-                dismissThresholds: 0.5, dismissible: false, shimmer: false,
-                width: 1170, height: 40, buttonSize: 40, radius: 20,
-                icon: Center(child: Container(
-                  width: 36,
-                  height: 36,
-                  decoration: BoxDecoration(shape: BoxShape.circle, color: Theme.of(context).cardColor),
-                  child: Center(child: Icon(
-                      Get.find<LocalizationController>().isLtr ?
-                      Icons.arrow_forward_ios_rounded :
-                      Icons.keyboard_arrow_left,
-                      color: Colors.grey, size: 20.0,
-                    )),
-                )),
-                isLtr: Get.find<LocalizationController>().isLtr,
-                boxShadow: const BoxShadow(blurRadius: 0),
-                buttonColor: Colors.transparent,
-                backgroundColor: Theme.of(context).primaryColor.withOpacity(0.15),
-                baseColor: Theme.of(context).primaryColor,
-              )) :
+              ),
+            ),
+          ),
+          isLtr: Get.find<LocalizationController>().isLtr,
+          boxShadow: const BoxShadow(blurRadius: 0),
+          buttonColor: Colors.transparent,
+          backgroundColor: Colors.red.withOpacity(0.15), // 🔴 track
+          baseColor: Colors.red, // 🔴 progress bar
+        ),
+      ),
+      const SizedBox(height: 20), // space after slider
+    ],
+  ),
+)
+// 👈 extra space AFTER slider
+ :
             const SizedBox(),
           ]) :
           Column(children: [

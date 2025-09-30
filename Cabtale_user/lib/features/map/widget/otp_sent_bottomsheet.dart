@@ -62,35 +62,55 @@ class _OtpSentBottomSheetState extends State<OtpSentBottomSheet> {
 
 
           Center(
-            child:SliderButton(
-              action: (){
-                currentState = 1;
-                widget.expandableKey.currentState?.expand();
-                setState(() {});
-              },
-              label: Text('cancel_ride'.tr,style: TextStyle(color: Theme.of(context).primaryColor),),
-              dismissThresholds: 0.5, dismissible: false, shimmer: false,
-              width: 1170, height: 40, buttonSize: 40, radius: 20,
-              icon: Center(child: Container(
-                width: 36,
-                height: 36,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Theme.of(context).cardColor),
-                child: Center(
-                  child: Icon(
-                    Get.find<LocalizationController>().isLtr ? Icons.arrow_forward_ios_rounded : Icons.keyboard_arrow_left,
-                    color: Colors.grey, size: 20.0,
-                  ),
-                ),
-              )),
-              isLtr: Get.find<LocalizationController>().isLtr,
-              boxShadow: const BoxShadow(blurRadius: 0),
-              buttonColor: Colors.transparent,
-              backgroundColor: Theme.of(context).primaryColor.withOpacity(0.15),
-              baseColor: Theme.of(context).primaryColor,
+  child: Column(
+    children: [
+      SliderButton(
+        action: () {
+          currentState = 1;
+          widget.expandableKey.currentState?.expand();
+          setState(() {});
+        },
+        label: Text(
+          'cancel_ride'.tr,
+          style: const TextStyle(color: Colors.red), // 🔴 text red
+        ),
+        dismissThresholds: 0.5,
+        dismissible: false,
+        shimmer: false,
+        width: MediaQuery.of(context).size.width * 0.9,
+        height: 60,
+        buttonSize: 50,
+        radius: 30,
+        icon: Center(
+          child: Container(
+            width: 46,
+            height: 46,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Color.fromARGB(83, 244, 67, 54),
             ),
+            child: Center(
+                child: Icon(
+                  Get.find<LocalizationController>().isLtr
+                      ? Icons.arrow_forward_ios_rounded
+                      : Icons.keyboard_arrow_left,
+                  color: Colors.red,
+                  size: 20.0,
+                ),
+              ),
           ),
+        ),
+        isLtr: Get.find<LocalizationController>().isLtr,
+        boxShadow: const BoxShadow(blurRadius: 0),
+        buttonColor: Colors.transparent,
+        backgroundColor: Colors.red.withOpacity(0.15),
+        baseColor: Colors.red, 
+      ),
+
+      const SizedBox(height: 20), // space after slider
+    ],
+  ),
+)
 
         ]) :
         const Column(children: [BannerShimmer(), BannerShimmer()]) :

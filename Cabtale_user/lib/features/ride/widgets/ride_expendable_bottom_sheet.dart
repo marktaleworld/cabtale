@@ -103,15 +103,24 @@ class _RideExpendableBottomSheetState extends State<RideExpendableBottomSheet> {
                             onPressed: _triggerEmergencyAction,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.red,
-                              shape: const CircleBorder(),
-                              padding: const EdgeInsets.all(20),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              padding: const EdgeInsets.symmetric(horizontal: 42, vertical: 18),
                             ),
-                            child: const Column(
+                            child: const Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Icon(Icons.warning, color: Colors.white, size: 18),
-                                SizedBox(height: 2),
-                                Text('SOS', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12)),
+                                Icon(Icons.warning, color: Colors.white, size: 20),
+                                SizedBox(width: 8),
+                                Text(
+                                  'SOS',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                  ),
+                                ),
                               ],
                             ),
                           ),

@@ -135,10 +135,11 @@ class MyApp extends StatelessWidget {
                                         Get.to(() => const MapScreen());
                                       });
                                     },
-                                    child: Stack(children: [
-                                      SizedBox(width: Dimensions.iconSizeExtraLarge,
+                                    child: Stack(
+                                      children: [
+                                      SizedBox(width: 35,
                                           child: Image.asset(Images.homeToMapIcon, color: Theme.of(context).primaryColor)),
-                                      Positioned(top: 0, bottom: 0, left: 5, right: 5, child: SizedBox(width: 15,child: Image.asset(Images.map, color: Theme.of(context).colorScheme.shadow)))
+                                      Positioned(top: 0, bottom: 0, left: 5, right: 5, child: SizedBox(width: 15,child: Image.asset(Images.arrowRight, color: Theme.of(context).colorScheme.shadow)))
                                     ]),
                                 ),
                             ),

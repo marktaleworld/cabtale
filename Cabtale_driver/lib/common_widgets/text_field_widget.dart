@@ -44,7 +44,7 @@ class TextFieldWidget extends StatefulWidget {
         this.capitalization = TextCapitalization.none,
         this.isPassword = false,
         this.isAmount = false,
-        this.borderRadius=50,
+        this.borderRadius=10,
         this.showBorder = false,
         this.prefixHeight = 50,
         this.countryDialCode,

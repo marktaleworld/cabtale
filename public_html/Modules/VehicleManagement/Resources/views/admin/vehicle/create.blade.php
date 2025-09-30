@@ -184,9 +184,9 @@
                     </div>
                 </div>
 
-                <div class="d-flex justify-content-end gap-3 mt-3">
+                <!-- <div class="d-flex justify-content-end gap-3 mt-3">
                     <button class="btn btn-primary" type="submit">{{ translate('submit') }}</button>
-                </div>
+                </div> -->
             </form>
         </div>
     </div>

@@ -2,7 +2,6 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
-
 import 'package:ride_sharing_user_app/common_widgets/button_widget.dart';
 import 'package:ride_sharing_user_app/common_widgets/custom_text_field.dart';
 import 'package:ride_sharing_user_app/features/auth/controllers/auth_controller.dart';
@@ -181,7 +180,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Text(
       titles[_currentStep],
       style: textBold.copyWith(
-        color: Theme.of(context).primaryColor,
+        color: Get.isDarkMode ? Colors.white : Theme.of(context).primaryColor,
         fontSize: Dimensions.fontSizeLarge,
       ),
     );
@@ -316,11 +315,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
               buttonText: 'Back',
               onPressed: _back,
               height: 45,
-              //radius: 20,
-              backgroundColor: Theme.of(context).cardColor,
-              textColor: Theme.of(context).primaryColor,
               showBorder: true,
-              borderColor: Theme.of(context).primaryColor,
+              transparent: true,
             ),
           ),
         if (_currentStep > 0) const SizedBox(width: Dimensions.paddingSizeDefault),
@@ -368,7 +364,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         'sign_up'.tr,
                         textAlign: TextAlign.center,
                         style: textBold.copyWith(
-                          color: Theme.of(context).primaryColor,
+                          color: Get.isDarkMode ? Colors.white : Theme.of(context).primaryColor,
                           fontSize: Dimensions.fontSizeOverLarge,
                         ),
                       ),

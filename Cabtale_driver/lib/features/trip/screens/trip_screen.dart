@@ -66,7 +66,7 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
               },
             ),
 
-            const SizedBox(height: 40),
+            const SizedBox(height: 63),
 
             tripController.activityTypeIndex == 0 ?
             TripsWidget(tripController: tripController, scrollController: scrollController) :
@@ -74,9 +74,9 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
           ]),
 
           Positioned(
-            top: Dimensions.topSpace,left: Dimensions.paddingSizeSmall,
+            top: 110,left: Dimensions.paddingSizeSmall,
             child: SizedBox(
-              height: Get.find<LocalizationController>().isLtr ? 45 : 50,
+              height: Get.find<LocalizationController>().isLtr ? 46 : 50,
               child: ListView.builder(
                 shrinkWrap: true,
                 padding: EdgeInsets.zero,

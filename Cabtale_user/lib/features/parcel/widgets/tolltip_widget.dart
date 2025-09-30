@@ -18,17 +18,18 @@ class _TollTipWidgetState extends State<TollTipWidget> {
   @override
   Widget build(BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Text(widget.title.tr, style: textMedium.copyWith(color: Theme.of(context).primaryColor)),
-       if(widget.showInsight)
-        InkWell(onTap: () => Get.to(() => const PolicyScreen()),
-          child: Container(decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-              color: Theme.of(context).primaryColor.withOpacity(0.1)),
-            padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault,vertical: Dimensions.paddingSizeExtraSmall),
-            child: Row(children: [
-                Text('insight'.tr,style: textRegular.copyWith(fontSize: Dimensions.fontSizeSmall,color: Theme.of(context).hintColor),),
-                const SizedBox(width: 3,),
-                Icon(Icons.info,color: Theme.of(context).primaryColor.withOpacity(0.6),size: 15)])))
+        Text(widget.title.tr, style: textMedium.copyWith(color: Get.isDarkMode ? Colors.white : Theme.of(context).primaryColor)),
+       //if(widget.showInsight)
+        // InkWell(onTap: () => Get.to(() => const PolicyScreen()),
+        //   child: Container(decoration: BoxDecoration(
+        //       borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+        //       color: Theme.of(context).primaryColor.withOpacity(0.1)),
+        //     padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault,vertical: Dimensions.paddingSizeExtraSmall),
+        //     child: Row(children: [
+        //         Text('insight'.tr,style: textRegular.copyWith(fontSize: Dimensions.fontSizeSmall,color: Theme.of(context).hintColor),),
+        //         const SizedBox(width: 3,),
+        //         Icon(Icons.info,color: Theme.of(context).primaryColor.withOpacity(0.6),size: 15)])
+        //         ))
       ],
     );
   }

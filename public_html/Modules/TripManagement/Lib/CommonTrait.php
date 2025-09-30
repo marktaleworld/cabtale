@@ -42,7 +42,7 @@ trait CommonTrait
 
             return [
                 'actual_fare'      => round($actual_fare, 2),
-                'final_fare'       => round($final_fare, 2), // ✅ toll included
+                'final_fare'       => round($final_fare, 2),
                 'waiting_fee'      => 0,
                 'idle_fare'        => 0,
                 'cancellation_fee' => 0,
